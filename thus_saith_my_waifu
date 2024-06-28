@@ -1,0 +1,98 @@
+#!/usr/bin/env python
+
+import sys
+from random import choice, gauss
+from textwrap import dedent
+from time import time_ns
+
+import click
+from termstr import error
+
+QUOTES: list[str] = [
+    """\
+    诶多 …… ☆ 是 ♡ 同 ♡ 类 ♡ 呢 ♡ 喵 ♪（由乃逆光捧脸.jpg）
+    那群八嘎是不会懂的呀 …… 关于「二次元の美好」♡
+    呐，如果说吾の存在有意义的话、那一定是因为「二·次·元」吧 ☆ ？
+    所以呢 —— 妄图污染这份「爱」的人类、都会被吾「抹」「杀」「掉」喔 ♪
+    （小声）嘛 …… 讨厌二次元的八嘎三次元最恶心了啊魂淡！★
+    """,
+    """\
+    呐、二次元の民那 …… 都·是·最·最·善·良·の·存·在·呐 ☆
+    多洗忒 …… 要「嘲笑」这样的孩子呢？吾辈不明白啊 ——
+    嘛 …… 说到底，你们都只是污秽の「来自三次元的大人」吧？
+    大人什么的、最·讨·厌·了 ★ ♪
+    """,
+    """\
+    啊嘞啊嘞 QAQ？多洗忒 …… 欧尼酱 ww？
+    呐、桥豆麻袋 …… 已经「厌烦」吾辈了嘛？
+    哼唧 …… 真是「冷·酷·の·人」呢 QuQ —— ☆(๑°⌓°๑)
+    嘛 …… 即便是这样的瓦塔西，一定也是有「存·在·の·意·义」的吧、内 ~ ★
+    快来「肯定」啊？不然呀 …… 咱可就要「黑化」了哦 ♪ 呐？
+    """,
+    """\
+    呐。。。（伸出的小手又迅速垂下去）
+    嗦嘎（表情有点失落），米娜桑已经不喜欢了呀（紧咬嘴唇）
+    得磨，米娜桑忘了当初吗（握紧小手）
+    莫以得丝（强忍住眼泪），已经大丈夫了呦（挤出笑脸）
+    瓦大喜瓦，滋多滋多，滋多滋多（语气越来越用力了）滋多戴斯给！！！
+    一滋嘛叠磨瓦撕裂嘛赛！！！至死都不会瓦斯裂嘛斯（认真的表情）
+    """,
+    """\
+    诶多 …… 看起来阁下对于「二·次·元」の理解、似·乎·满·是·谬·误·哦 ☆ ~
+    嘛，连最为基本の「礼♪义♪廉♪耻♪」都早已失去了啊 …… ♪（笑）
+    呐，我说啊 —— 这样の kimino、也有自称「二 ♡ 次 ♡ 元」の资格吗 ★ ？
+    fufufu —— 说到底、阁下已经「二·次·元·失·格」了吧？呐 ~ ♪
+    """,
+    """\
+    唔噗噗 ~ 汝等「劣·等·生·物」...... 也配去「妄想」吗？
+    呐、「真正的二次元」什么的 —— 吾辈看汝是一点都不懂啊 ☆（笑）
+    嘛嘛嘛 ...... 不过看着汝试图伪装成「二次元」の可笑姿态，
+    倒是让吾辈对于「三·次·元·的·白·痴」稍微有了些许兴趣哦？★
+    """,
+    """\
+    哼！（跺了跺粉嫩的小脚，肉嘟嘟的小手交叉摆在胸前，小嘴一撅，
+    头抬得高高的撇向一边，一副生人勿近的模样。又怕你真的离开，偷偷侧过脑袋看你）
+    """,
+    """\
+    喜欢你啊！八嘎！
+    为什么察觉不到啊，八嘎八嘎八嘎，最讨人厌啦。
+    但又是那么喜欢你，suki，suki，daisuki。
+    笨蛋，再多看看我啊！毕竟人家，最喜欢你了啊。
+    """,
+]
+
+
+@click.command()
+@click.option(
+    "--mean",
+    show_default=True,
+    default=8.0,
+    help="The mean time (in milliseconds) taken to type a single character.",
+)
+@click.option(
+    "--stddev",
+    show_default=True,
+    default=64.0,
+    help="The standard deviation (in milliseconds) of the time taken to type a single character.",
+)
+def thus_saith_my_waifu(mean: float, stddev: float) -> None:
+    if mean < 0:
+        error("the mean time must be non-negative")
+        sys.exit(1)
+    if stddev < 0:
+        error("the standard deviation must be non-negative")
+        sys.exit(1)
+
+    quote = dedent(choice(QUOTES))
+
+    start = time_ns()
+    for char in quote:
+        duration = gauss(mean * 1e6, stddev * 1e6)
+        while time_ns() - start < duration:
+            pass
+        print(char, end="", flush=True)
+        start = time_ns()
+
+
+if __name__ == "__main__":
+    thus_saith_my_waifu()
