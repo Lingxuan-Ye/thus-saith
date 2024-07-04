@@ -1,0 +1,12 @@
+[package]
+name = "thus_saith_my_waifu"
+version = "0.1.0"
+edition = "2021"
+authors = ["Lingxuan Ye <love@lingxuan.io>"]
+categories = ["command-line-utilities"]
+repository = "https://github.com/Lingxuan-Ye/thus_saith_my_waifu"
+readme = "README.md"
+license = "MIT"
+description = "Thus saith my waifu!"
+
+[dependencies]

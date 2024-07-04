@@ -1,2 +1,6 @@
+# Python
 __pycache__/
 .mypy_cache/
+
+# Rust
+/target
