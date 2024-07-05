@@ -1,18 +1,18 @@
 #[derive(Debug)]
 pub enum ValueError {
-    IsNaN,
     IsZero,
-    IsNegative,
+    IsNaN,
     IsInfinite,
+    IsNegative,
 }
 
 impl std::fmt::Display for ValueError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            Self::IsNaN => write!(f, "value cannot be NaN"),
             Self::IsZero => write!(f, "value cannot be zero"),
-            Self::IsNegative => write!(f, "value cannot be negative"),
+            Self::IsNaN => write!(f, "value cannot be NaN"),
             Self::IsInfinite => write!(f, "value cannot be infinite"),
+            Self::IsNegative => write!(f, "value cannot be negative"),
         }
     }
 }
