@@ -1,13 +1,9 @@
 use crate::error::ValueError;
 use rand::prelude::*;
 use rand_distr::LogNormal;
-use std::borrow::Cow;
+use std::fmt::Display;
 use std::io::{Error as IoError, Write};
 use std::time::{Duration, Instant};
-
-/// In this context, a `Char` is a valid Unicode character,
-/// with or without ANSI escape codes.
-pub type Char<'a> = Cow<'a, str>;
 
 #[derive(Debug)]
 pub struct Typist {
@@ -26,9 +22,12 @@ impl Typist {
         Ok(Self { distribution, rng })
     }
 
-    pub fn type_out<'a, I, W>(&mut self, quote: I, mut output: W) -> Result<&mut Self, IoError>
+    /// In this context, a `C` (char) means a valid Unicode character,
+    /// with or without ANSI escape codes.
+    pub fn type_out<C, I, W>(&mut self, quote: I, mut output: W) -> Result<&mut Self, IoError>
     where
-        I: IntoIterator<Item = Char<'a>>,
+        C: Display,
+        I: IntoIterator<Item = C>,
         W: Write,
     {
         for char in quote {
