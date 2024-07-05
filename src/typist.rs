@@ -1,4 +1,3 @@
-use crate::check::SanityCheck;
 use crate::error::ValueError;
 use rand::prelude::*;
 use rand_distr::LogNormal;
@@ -18,16 +17,8 @@ pub struct Typist {
 
 impl Typist {
     pub fn with_chars_per_min(mean: f64, std_dev: f64) -> Result<Self, ValueError> {
-        let mean = mean
-            .ensure_non_nan()?
-            .ensure_non_zero()?
-            .ensure_positive()?
-            .ensure_finite()?;
-        let std_dev = std_dev
-            .ensure_non_nan()?
-            .ensure_non_zero()?
-            .ensure_positive()?
-            .ensure_finite()?;
+        let mean = Self::sanity_check(mean)?;
+        let std_dev = Self::sanity_check(std_dev)?;
         let sigma = (std_dev.powi(2) / mean.powi(2) + 1.0).ln().sqrt();
         let mu = mean.ln() - 0.5 * sigma.powi(2);
         let distribution = LogNormal::new(mu, sigma).expect("will never fail");
@@ -48,5 +39,19 @@ impl Typist {
             write!(output, "{char}")?;
         }
         Ok(self)
+    }
+
+    fn sanity_check(value: f64) -> Result<f64, ValueError> {
+        if value == 0.0 {
+            Err(ValueError::IsZero)
+        } else if value.is_nan() {
+            Err(ValueError::IsNaN)
+        } else if value.is_infinite() {
+            Err(ValueError::IsInfinite)
+        } else if value.is_sign_negative() {
+            Err(ValueError::IsNegative)
+        } else {
+            Ok(value)
+        }
     }
 }

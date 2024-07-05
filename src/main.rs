@@ -1,4 +1,3 @@
-mod check;
 mod error;
 mod typist;
 
