@@ -1,10 +1,10 @@
 [package]
-name = "thus_saith"
+name = "thus-saith"
 version = "0.1.0"
 edition = "2021"
 authors = ["Lingxuan Ye <love@lingxuan.io>"]
 categories = ["command-line-utilities"]
-repository = "https://github.com/Lingxuan-Ye/thus_saith_my_waifu"
+repository = "https://github.com/Lingxuan-Ye/thus-saith"
 readme = "README.md"
 license = "MIT"
 description = "Thus saith my waifu!"

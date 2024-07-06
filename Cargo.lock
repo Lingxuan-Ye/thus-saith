@@ -382,7 +382,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "thus_saith"
+name = "thus-saith"
 version = "0.1.0"
 dependencies = [
  "anyhow",
