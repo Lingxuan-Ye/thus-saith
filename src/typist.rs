@@ -27,7 +27,7 @@ impl Typist {
             .value;
         let sigma = (std_dev.powi(2) / mean.powi(2) + 1.0).ln().sqrt();
         let mu = mean.ln() - 0.5 * sigma.powi(2);
-        let distribution = LogNormal::new(mu, sigma)?;
+        let distribution = LogNormal::new(mu, sigma).expect("will never fail");
         let rng = thread_rng();
         Ok(Self { distribution, rng })
     }
