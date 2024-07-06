@@ -21,7 +21,7 @@ impl Config {
         let mut config: Option<Config> = None;
 
         if let Ok(mut path) = current_dir() {
-            path.push("thus_saith.toml");
+            path.push("thus-saith.toml");
             if let Some(result) = Self::load_file(&path) {
                 config = Some(result?);
             };
@@ -29,7 +29,7 @@ impl Config {
 
         if config.is_none() {
             if let Some(mut path) = dirs::home_dir() {
-                path.push(".thus_saith.toml");
+                path.push(".thus-saith.toml");
                 if let Some(result) = Self::load_file(&path) {
                     config = Some(result?);
                 };
@@ -38,7 +38,7 @@ impl Config {
 
         if config.is_none() {
             if let Some(mut path) = dirs::config_dir() {
-                path.push("thus_saith/config.toml");
+                path.push("thus-saith/config.toml");
                 if let Some(result) = Self::load_file(&path) {
                     config = Some(result?);
                 };

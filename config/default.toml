@@ -2,18 +2,18 @@
 #
 # 配置文件将按如下顺序加载（或 Windows 下的等价路径）：
 #
-# 1. $PWD/thus_saith.toml
-# 2. $HOME/.thus_saith.toml
-# 3. $XDG_CONFIG_HOME/thus_saith/config.toml
+# 1. $PWD/thus-saith.toml
+# 2. $HOME/.thus-saith.toml
+# 3. $XDG_CONFIG_HOME/thus-saith/config.toml
 #
 # 如果所有路径均不存在，将使用默认配置。
 #
 # Configuration files are loaded in the following order
 # (or their equivalent paths in Windows):
 #
-# 1. $PWD/thus_saith.toml
-# 2. $HOME/.thus_saith.toml
-# 3. $XDG_CONFIG_HOME/thus_saith/config.toml
+# 1. $PWD/thus-saith.toml
+# 2. $HOME/.thus-saith.toml
+# 3. $XDG_CONFIG_HOME/thus-saith/config.toml
 #
 # If none of these exists, the default configuration will be used.
 #
