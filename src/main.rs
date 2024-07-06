@@ -1,3 +1,4 @@
+mod arg;
 mod config;
 mod error;
 mod select;
