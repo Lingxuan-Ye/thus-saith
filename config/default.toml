@@ -1,15 +1,55 @@
-# 字段 `weight` 为非负有限浮点数，表示条目的权重。权重越高，被选中的概率越大。
-# 当 `weight` 为 0 时，该条目不会被选中。
-# 当 `weight` 为负数、无穷大或 NaN 时，该字段将被视为 0。
-# 当 `weight` 为整数时，将自动转为浮点数。
-# 当 `weight` 不存在时，该字段将被设为其他权重的平均值。
-
-# Field `weight` is a non-negative, finite floating-point number representing
-# the entry's weight. Higher weights increase the probability of selection.
-# If `weight` is 0, the entry will not be selected.
-# If `weight` is negative, infinite, or NaN, it will be treated as 0.
-# If `weight` is an integer, it will be converted to a floating-point number.
-# If `weight` is missing, it will be set to the average of other weights.
+# # 加载顺序 - Load Order
+#
+# 配置文件将按如下顺序加载（或 Windows 下的等价路径）：
+#
+# 1. $PWD/thus_saith.toml
+# 2. $HOME/.thus_saith.toml
+# 3. $XDG_CONFIG_HOME/thus_saith/config.toml
+#
+# 如果所有路径均不存在，将使用默认配置。
+#
+# Configuration files are loaded in the following order
+# (or their equivalent paths in Windows):
+#
+# 1. $PWD/thus_saith.toml
+# 2. $HOME/.thus_saith.toml
+# 3. $XDG_CONFIG_HOME/thus_saith/config.toml
+#
+# If none of these exists, the default configuration will be used.
+#
+# # 字段说明 - Field Description
+#
+# ## `quote`
+#
+# 表数组，每项均由字段 `weight` 和 `content` 组成。
+#
+# Array of tables, each containing fields `weight` and `content`.
+#
+# ### `weight`
+#
+# 浮点数，代表条目的权重。当该字段：
+#
+# - 为 0，条目不会被选中；
+# - 为 nan、inf 或负数，将视为 0 处理；
+# - 为整数，将自动转为浮点数；
+# - 不存在，将设为其他权重的平均值。
+#
+# 当所有权重均为 0 时，将抛出错误。
+#
+# Float, representing the weight of the entry. When this field is:
+#
+# - 0, the entry will not be selected;
+# - nan, inf, or negative, it will be treated as 0;
+# - an integer, it will be converted to a floating-point number;
+# - missing, it will be set to the average of other weights.
+#
+# An error will be thrown when all weights are 0.
+#
+# ## `content`
+#
+# 字符串，代表条目的内容。
+#
+# String, representing the content of the entry.
 
 [[quote]]
 weight = 1
