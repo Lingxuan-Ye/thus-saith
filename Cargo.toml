@@ -10,6 +10,7 @@ license = "MIT"
 description = "Thus saith my waifu!"
 
 [dependencies]
+ansi_term = "0.12.1"
 anyhow = "1.0.86"
 clap = { version = "4.5.8", features = ["cargo"] }
 ctrlc = "3.4.4"
