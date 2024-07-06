@@ -1,4 +1,4 @@
-use crate::arg::Arg;
+use crate::sanity::{NonNegFinite, PosFinite};
 use anyhow::Result;
 use rand::prelude::*;
 use rand_distr::LogNormal;
@@ -12,23 +12,14 @@ pub struct Typist {
 }
 
 impl Typist {
-    pub fn with_chars_per_min(mean: f64, std_dev: f64) -> Result<Self> {
-        let mean = Arg::new("mean", mean)
-            .ensure_non_nan()?
-            .ensure_finite()?
-            .ensure_non_zero()?
-            .ensure_non_negative()?
-            .value;
-        let std_dev = Arg::new("std-dev", std_dev)
-            .ensure_non_nan()?
-            .ensure_finite()?
-            .ensure_non_negative()?
-            .value;
+    pub fn with_chars_per_min(mean: PosFinite, std_dev: NonNegFinite) -> Self {
+        let mean = mean.value();
+        let std_dev = std_dev.value();
         let sigma = (std_dev.powi(2) / mean.powi(2) + 1.0).ln().sqrt();
         let mu = mean.ln() - 0.5 * sigma.powi(2);
         let distribution = LogNormal::new(mu, sigma).expect("will never fail");
         let rng = thread_rng();
-        Ok(Self { distribution, rng })
+        Self { distribution, rng }
     }
 
     /// In this context, a `C` (char) means a valid Unicode character,

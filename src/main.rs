@@ -1,5 +1,5 @@
-mod arg;
 mod config;
+mod sanity;
 mod select;
 mod tokenizer;
 mod typist;
