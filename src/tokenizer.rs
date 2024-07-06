@@ -1,4 +1,4 @@
-/// Why call it Tokenizer? It does not tokenize anything but splits text.
+/// Why name it Tokenizer? It does't tokenize anything but splits text!
 pub struct Tokenizer;
 
 impl Tokenizer {
