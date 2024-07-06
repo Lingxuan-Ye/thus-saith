@@ -4,13 +4,13 @@ use std::env::current_dir;
 use std::fs::read_to_string;
 use std::path::Path;
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct Quote {
     pub weight: Option<f64>,
     pub content: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct Config {
     #[serde(rename = "quote")]
     pub quotes: Vec<Quote>,

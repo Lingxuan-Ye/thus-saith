@@ -6,7 +6,6 @@ use std::fmt::Display;
 use std::io::Write;
 use std::time::{Duration, Instant};
 
-#[derive(Debug)]
 pub struct Typist {
     distribution: LogNormal<f64>,
     rng: ThreadRng,
