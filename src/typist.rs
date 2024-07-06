@@ -36,6 +36,7 @@ impl Typist {
             let start = Instant::now();
             while start.elapsed() < secs_per_char {}
             write!(output, "{char}")?;
+            output.flush()?;
         }
         Ok(self)
     }
