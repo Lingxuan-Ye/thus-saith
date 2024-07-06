@@ -32,18 +32,18 @@
 # - 为 0，条目不会被选中；
 # - 为 nan、inf 或负数，将视为 0 处理；
 # - 为整数，将自动转为浮点数；
-# - 不存在，将设为其他权重的平均值。
+# - 不存在，将设为其他非零权重的平均值。
 #
-# 当所有权重均为 0 时，将抛出错误。
+# 当所有权重的总和为 0 或 inf 时，将抛出错误。
 #
 # Float, representing the weight of the entry. When this field is:
 #
 # - 0, the entry will not be selected;
 # - nan, inf, or negative, it will be treated as 0;
 # - an integer, it will be converted to a floating-point number;
-# - missing, it will be set to the average of other weights.
+# - missing, it will be set to the average of other non-zero weights.
 #
-# An error will be thrown when all weights are 0.
+# An error will be thrown when the sum of all weights is 0 or inf.
 #
 # ## `content`
 #
