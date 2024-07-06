@@ -11,7 +11,7 @@ description = "Thus saith my waifu!"
 
 [dependencies]
 anyhow = "1.0.86"
-clap = "4.5.8"
+clap = { version = "4.5.8", features = ["cargo"] }
 ctrlc = "3.4.4"
 dirs = "5.0.1"
 rand = "0.8.5"
