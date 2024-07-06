@@ -1,8 +1,9 @@
-use crate::error::ValueError;
+use crate::arg::Arg;
+use anyhow::Result;
 use rand::prelude::*;
 use rand_distr::LogNormal;
 use std::fmt::Display;
-use std::io::{Error as IoError, Write};
+use std::io::Write;
 use std::time::{Duration, Instant};
 
 #[derive(Debug)]
@@ -12,19 +13,28 @@ pub struct Typist {
 }
 
 impl Typist {
-    pub fn with_chars_per_min(mean: f64, std_dev: f64) -> Result<Self, ValueError> {
-        let mean = Self::sanity_check(mean)?;
-        let std_dev = Self::sanity_check(std_dev)?;
+    pub fn with_chars_per_min(mean: f64, std_dev: f64) -> Result<Self> {
+        let mean = Arg::new("mean", mean)
+            .ensure_non_nan()?
+            .ensure_finite()?
+            .ensure_non_zero()?
+            .ensure_non_negative()?
+            .value;
+        let std_dev = Arg::new("std-dev", std_dev)
+            .ensure_non_nan()?
+            .ensure_finite()?
+            .ensure_non_negative()?
+            .value;
         let sigma = (std_dev.powi(2) / mean.powi(2) + 1.0).ln().sqrt();
         let mu = mean.ln() - 0.5 * sigma.powi(2);
-        let distribution = LogNormal::new(mu, sigma).expect("will never fail");
+        let distribution = LogNormal::new(mu, sigma)?;
         let rng = thread_rng();
         Ok(Self { distribution, rng })
     }
 
     /// In this context, a `C` (char) means a valid Unicode character,
     /// with or without ANSI escape codes.
-    pub fn type_out<C, I, W>(&mut self, quote: I, mut output: W) -> Result<&mut Self, IoError>
+    pub fn type_out<C, I, W>(&mut self, quote: I, mut output: W) -> Result<&mut Self>
     where
         C: Display,
         I: IntoIterator<Item = C>,
@@ -38,19 +48,5 @@ impl Typist {
             write!(output, "{char}")?;
         }
         Ok(self)
-    }
-
-    fn sanity_check(value: f64) -> Result<f64, ValueError> {
-        if value == 0.0 {
-            Err(ValueError::IsZero)
-        } else if value.is_nan() {
-            Err(ValueError::IsNaN)
-        } else if value.is_infinite() {
-            Err(ValueError::IsInfinite)
-        } else if value.is_sign_negative() {
-            Err(ValueError::IsNegative)
-        } else {
-            Ok(value)
-        }
     }
 }
