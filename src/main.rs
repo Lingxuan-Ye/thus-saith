@@ -1,6 +1,5 @@
 mod arg;
 mod config;
-mod error;
 mod select;
 mod tokenizer;
 mod typist;
