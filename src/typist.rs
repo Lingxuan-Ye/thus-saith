@@ -22,15 +22,15 @@ impl Typist {
         Self { distribution, rng }
     }
 
-    /// In this context, a `C` (char) means a valid Unicode character,
+    /// In this context, a `char` means a valid Unicode character,
     /// with or without ANSI escape codes.
-    pub fn type_out<C, I, W>(&mut self, quote: I, mut output: W) -> Result<&mut Self>
+    pub fn type_out<C, I, W>(&mut self, chars: I, mut output: W) -> Result<&mut Self>
     where
         C: Display,
         I: IntoIterator<Item = C>,
         W: Write,
     {
-        for char in quote {
+        for char in chars {
             let chars_per_min = self.rng.sample(self.distribution);
             let secs_per_char = Duration::from_secs_f64(60.0 / chars_per_min);
             let start = Instant::now();
