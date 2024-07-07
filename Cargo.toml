@@ -1,0 +1,21 @@
+[package]
+name = "thus-saith"
+version = "0.1.0"
+edition = "2021"
+authors = ["Lingxuan Ye <love@lingxuan.io>"]
+categories = ["command-line-utilities"]
+repository = "https://github.com/Lingxuan-Ye/thus-saith"
+readme = "README.md"
+license = "MIT"
+description = "Thus saith my waifu!"
+
+[dependencies]
+ansi_term = "0.12.1"
+anyhow = "1.0.86"
+clap = { version = "4.5.8", features = ["cargo"] }
+ctrlc = "3.4.4"
+dirs = "5.0.1"
+rand = "0.8.5"
+rand_distr = "0.4.3"
+serde = { version = "1.0.203", features = ["derive"] }
+toml = "0.8.14"

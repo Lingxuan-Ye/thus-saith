@@ -1,0 +1,141 @@
+# # 加载顺序 - Load Order
+#
+# 配置文件将按如下顺序加载（或 Windows 下的等价路径）：
+#
+# 1. $PWD/thus-saith.toml
+# 2. $HOME/.thus-saith.toml
+# 3. $XDG_CONFIG_HOME/thus-saith/config.toml
+#
+# 如果所有路径均不存在，将使用默认配置。
+#
+# Configuration files are loaded in the following order
+# (or their equivalent paths in Windows):
+#
+# 1. $PWD/thus-saith.toml
+# 2. $HOME/.thus-saith.toml
+# 3. $XDG_CONFIG_HOME/thus-saith/config.toml
+#
+# If none of these exists, the default configuration will be used.
+#
+# # 字段说明 - Field Description
+#
+# ## `messages`
+#
+# 表，其字段定义了特定事件的文本消息。
+#
+# Table, whose fields define text messages for specific events.
+#
+# ### `interrupt`
+#
+# 字符串，当程序捕获到中断信号 SIGINT 时显示。
+#
+# String, displayed when the program catches the interrupt signal SIGINT.
+#
+# ## `quote`
+#
+# 表数组，每项均由字段 `weight` 和 `content` 组成。
+#
+# Array of tables, each containing fields `weight` and `content`.
+#
+# ### `weight`
+#
+# 浮点数，代表条目的权重。当该字段：
+#
+# - 为 0，条目不会被选中；
+# - 为 nan、inf 或负数，将视为 0 处理；
+# - 为整数，将自动转为浮点数；
+# - 不存在，将设为其他非零权重的平均值。
+#
+# 当所有权重的总和为 0 或 inf 时，将抛出错误。
+#
+# Float, representing the weight of the entry. When this field is:
+#
+# - 0, the entry will not be selected;
+# - nan, inf, or negative, it will be treated as 0;
+# - an integer, it will be converted to a floating-point number;
+# - missing, it will be set to the average of other non-zero weights.
+#
+# An error will be thrown when the sum of all weights is 0 or inf.
+#
+# ## `content`
+#
+# 字符串，代表条目的内容。
+#
+# String, representing the content of the entry.
+
+[messages]
+interrupt = "呐、桥豆麻袋 …… 已经「厌烦」吾辈了嘛？"
+
+[[quote]]
+weight = 1
+content = """
+诶多 …… ☆ 是 ♡ 同 ♡ 类 ♡ 呢 ♡ 喵 ♪（由乃逆光捧脸.jpg）
+那群八嘎是不会懂的呀 …… 关于「二次元の美好」♡
+呐，如果说吾の存在有意义的话、那一定是因为「二·次·元」吧 ☆ ？
+所以呢 —— 妄图污染这份「爱」的人类、都会被吾「抹」「杀」「掉」喔 ♪
+（小声）嘛 …… 讨厌二次元的八嘎三次元最恶心了啊魂淡！★
+"""
+
+[[quote]]
+weight = 1
+content = """
+呐、二次元の民那 …… 都·是·最·最·善·良·の·存·在·呐 ☆
+多洗忒 …… 要「嘲笑」这样的孩子呢？吾辈不明白啊 ——
+嘛 …… 说到底，你们都只是污秽の「来自三次元的大人」吧？
+大人什么的、最·讨·厌·了 ★ ♪
+"""
+
+[[quote]]
+weight = 1
+content = """
+啊嘞啊嘞 QAQ？多洗忒 …… 欧尼酱 ww？
+呐、桥豆麻袋 …… 已经「厌烦」吾辈了嘛？
+哼唧 …… 真是「冷·酷·の·人」呢 QuQ —— ☆(๑°⌓°๑)
+嘛 …… 即便是这样的瓦塔西，一定也是有「存·在·の·意·义」的吧、内 ~ ★
+快来「肯定」啊？不然呀 …… 咱可就要「黑化」了哦 ♪ 呐？
+"""
+
+[[quote]]
+weight = 1
+content = """
+呐。。。（伸出的小手又迅速垂下去）
+嗦嘎（表情有点失落），米娜桑已经不喜欢了呀（紧咬嘴唇）
+得磨，米娜桑忘了当初吗（握紧小手）
+莫以得丝（强忍住眼泪），已经大丈夫了呦（挤出笑脸）
+瓦大喜瓦，滋多滋多，滋多滋多（语气越来越用力了）滋多戴斯给！！！
+一滋嘛叠磨瓦撕裂嘛赛！！！至死都不会瓦斯裂嘛斯（认真的表情）
+"""
+
+[[quote]]
+weight = 1
+content = """
+诶多 …… 看起来阁下对于「二·次·元」の理解、似·乎·满·是·谬·误·哦 ☆ ~
+嘛，连最为基本の「礼♪义♪廉♪耻♪」都早已失去了啊 …… ♪（笑）
+呐，我说啊 —— 这样の kimino、也有自称「二 ♡ 次 ♡ 元」の资格吗 ★ ？
+fufufu —— 说到底、阁下已经「二·次·元·失·格」了吧？呐 ~ ♪
+"""
+
+[[quote]]
+weight = 1
+content = """
+唔噗噗 ~ 汝等「劣·等·生·物」…… 也配去「妄想」吗？
+呐、「真正的二次元」什么的 —— 吾辈看汝是一点都不懂啊 ☆（笑）
+嘛嘛嘛 …… 不过看着汝试图伪装成「二次元」の可笑姿态，
+倒是让吾辈对于「三·次·元·的·白·痴」稍微有了些许兴趣哦？★
+"""
+
+[[quote]]
+weight = 1
+content = """
+哼！（跺了跺粉嫩的小脚，肉嘟嘟的小手交叉摆在胸前，小嘴一撅，
+头抬得高高的撇向一边，一副生人勿近的模样。又怕你真的离开，偷偷侧过脑袋看你）
+"""
+
+[[quote]]
+weight = 1
+content = """
+喜欢你啊！八嘎！
+为什么察觉不到啊，八嘎八嘎八嘎，最讨人厌啦。
+但又是那么喜欢你，suki，suki，daisuki。
+笨蛋，再多看看我啊！毕竟人家，最喜欢你了啊。
+"""
