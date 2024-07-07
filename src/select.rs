@@ -1,4 +1,4 @@
-use crate::config::{Config, Quote};
+use crate::config::Quote;
 use anyhow::{ensure, Result};
 use rand::Rng;
 use rand_distr::WeightedIndex;
@@ -11,8 +11,8 @@ struct NormalizedQuote<'a> {
 pub struct Selector;
 
 impl Selector {
-    pub fn select(config: &Config) -> Result<&str> {
-        let normalized = Self::normalize(&config.quotes)?;
+    pub fn select(quotes: &Vec<Quote>) -> Result<&str> {
+        let normalized = Self::normalize(quotes)?;
         let weights = normalized.iter().map(|quote| quote.weight);
         let distribution = WeightedIndex::new(weights).expect("will never fail");
         let index = rand::thread_rng().sample(distribution);
