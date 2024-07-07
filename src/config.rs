@@ -5,6 +5,11 @@ use std::fs::read_to_string;
 use std::path::Path;
 
 #[derive(Deserialize)]
+pub struct Messages {
+    pub interrupt: String,
+}
+
+#[derive(Deserialize)]
 pub struct Quote {
     pub weight: Option<f64>,
     pub content: String,
@@ -12,6 +17,8 @@ pub struct Quote {
 
 #[derive(Deserialize)]
 pub struct Config {
+    pub messages: Messages,
+
     #[serde(rename = "quote")]
     pub quotes: Vec<Quote>,
 }
