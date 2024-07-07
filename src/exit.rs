@@ -1,5 +1,5 @@
-use ansi_term::Colour::Red;
-use anyhow::Result;
+use ansi_term::Colour::{Red, Yellow};
+use anyhow::{Context, Result};
 use std::process::exit;
 
 pub trait ExitOnError<T> {
@@ -20,4 +20,15 @@ impl<T> ExitOnError<T> for Result<T> {
             Ok(value) => value,
         }
     }
+}
+
+pub fn handle_interrupt(message: String) {
+    ctrlc::set_handler(move || {
+        eprintln!();
+        eprintln!();
+        eprintln!("{}", Yellow.bold().paint(&message));
+        exit(1);
+    })
+    .context("system error occurred")
+    .exit_on_error();
 }
