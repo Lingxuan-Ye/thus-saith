@@ -10,13 +10,13 @@ impl Cli {
                 .value_name("NUMBER")
                 .value_parser(value_parser!(f64))
                 .default_value("100")
-                .help("The average time (in milliseconds) taken per character"),
+                .help("Average time per character (in ms)"),
             Arg::new("std-dev")
                 .long("std-dev")
                 .value_name("NUMBER")
                 .value_parser(value_parser!(f64))
                 .default_value("100")
-                .help("The standard deviation (in milliseconds) of the time taken per character"),
+                .help("Standard deviation of time per character (in ms)"),
         ]);
         Self(command)
     }

@@ -19,8 +19,8 @@ Thus saith my waifu!
 Usage: thus-saith [OPTIONS]
 
 Options:
-      --mean <NUMBER>     The average time (in milliseconds) taken per character [default: 100]
-      --std-dev <NUMBER>  The standard deviation (in milliseconds) of the time taken per character [default: 100]
+      --mean <NUMBER>     Average time per character (in ms) [default: 100]
+      --std-dev <NUMBER>  Standard deviation of time per character (in ms) [default: 100]
   -h, --help              Print help
   -V, --version           Print version
 ```
@@ -58,7 +58,7 @@ Refer to the [default configuration file](./config/default.toml) for more detail
 ```
 
 ```
-❯ thus-saith --mean 8000 --std-dev 4000
+❯ thus-saith --mean 20 --std-dev 40
 诶多 …… 看起来阁下对于「二·次·元」の理解、似·乎·满·是·谬·误·哦 ☆ ~
 嘛，连最为基本の「礼♪义♪廉♪耻♪」都早已失去了啊 …… ♪（笑）
 呐，我说啊 —— 这样の kimino、也有自称「二 ♡ 次 ♡ 元」の资格吗 ★ ？
