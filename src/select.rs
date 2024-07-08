@@ -1,5 +1,5 @@
 use crate::config::Quote;
-use anyhow::{ensure, Result};
+use anyhow::{ensure, Context, Result};
 use rand::Rng;
 use rand_distr::WeightedIndex;
 
@@ -14,7 +14,7 @@ impl Selector {
     pub fn select(quotes: &Vec<Quote>) -> Result<&str> {
         let normalized = Self::normalize(quotes)?;
         let weights = normalized.iter().map(|quote| quote.weight);
-        let distribution = WeightedIndex::new(weights).expect("will never fail");
+        let distribution = WeightedIndex::new(weights).context("unexpected error")?;
         let index = rand::thread_rng().sample(distribution);
         Ok(normalized[index].content)
     }
@@ -59,7 +59,7 @@ impl Selector {
             }
         }
 
-        ensure!(total_weight.is_finite(), "total weight too large");
+        ensure!(total_weight.is_finite(), "total weight overflows");
 
         Ok(normalized)
     }
