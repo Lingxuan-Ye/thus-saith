@@ -1,7 +1,6 @@
 # Thus Saith My Waifu!
 
 [![Crates.io](https://img.shields.io/crates/v/thus-saith.svg)](https://crates.io/crates/thus-saith)
-[![Documentation](https://docs.rs/thus-saith/badge.svg)](https://docs.rs/thus-saith)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Thus saith my waifu, I mean it.
@@ -20,8 +19,8 @@ Thus saith my waifu!
 Usage: thus-saith [OPTIONS]
 
 Options:
-  -m, --mean <NUMBER>     The average number of characters typed per minute [default: 2000]
-  -s, --std-dev <NUMBER>  The standard deviation of the number of characters typed per minute [default: 4000]
+      --mean <NUMBER>     The average time (in milliseconds) taken per character [default: 100]
+      --std-dev <NUMBER>  The standard deviation (in milliseconds) of the time taken per character [default: 100]
   -h, --help              Print help
   -V, --version           Print version
 ```
