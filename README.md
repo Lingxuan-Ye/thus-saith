@@ -27,16 +27,13 @@ Options:
 
 ## Configuration
 
-Configuration files are loaded in the following order
-(or their equivalent paths in Windows):
+You can create a configuration file in the following locations (or their equivalent paths on Windows):
 
 1. `$PWD/thus-saith.toml`
 2. `$HOME/.thus-saith.toml`
 3. `$XDG_CONFIG_HOME/thus-saith/config.toml`
 
-If none of these exists, the default configuration will be used.
-
-Refer to the [default configuration file](./config/default.toml) for more details.
+If none of these files exist, don't worry, the [default configuration](./config/default.toml) will be used. Refer to this file for more details.
 
 ## Examples
 
@@ -64,7 +61,3 @@ Refer to the [default configuration file](./config/default.toml) for more detail
 呐，我说啊 —— 这样の kimino、也有自称「二 ♡ 次 ♡ 元」の资格吗 ★ ？
 fufufu —— 说到底、阁下已经「二·次·元·失·格」了吧？呐 ~ ♪
 ```
-
-## Future Plans
-
-- May improve documentation.

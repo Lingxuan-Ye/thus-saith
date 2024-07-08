@@ -1,73 +1,43 @@
-# # 加载顺序 - Load Order
-#
-# 配置文件将按如下顺序加载（或 Windows 下的等价路径）：
+# 各项设置将分别按照如下顺序寻找其第一个有效值：
 #
 # 1. $PWD/thus-saith.toml
 # 2. $HOME/.thus-saith.toml
 # 3. $XDG_CONFIG_HOME/thus-saith/config.toml
 #
-# 如果所有路径均不存在，将使用默认配置。
+# 如果有效值不存在，将使用其默认值。
 #
-# Configuration files are loaded in the following order
-# (or their equivalent paths in Windows):
+# Each setting will be searched in the following order:
 #
 # 1. $PWD/thus-saith.toml
 # 2. $HOME/.thus-saith.toml
 # 3. $XDG_CONFIG_HOME/thus-saith/config.toml
 #
-# If none of these exists, the default configuration will be used.
-#
-# # 字段说明 - Field Description
-#
-# ## `messages`
-#
-# 表，其字段定义了特定事件的文本消息。
-#
-# Table, whose fields define text messages for specific events.
-#
-# ### `interrupt`
-#
-# 字符串，当程序捕获到中断信号 SIGINT 时显示。
-#
-# String, displayed when the program catches the interrupt signal SIGINT.
-#
-# ## `quote`
-#
-# 表数组，每项均由字段 `weight` 和 `content` 组成。
-#
-# Array of tables, each containing fields `weight` and `content`.
-#
-# ### `weight`
-#
-# 浮点数，代表条目的权重。当该字段：
-#
-# - 为 0，条目不会被选中；
-# - 为 nan、inf 或负数，将视为 0 处理；
-# - 为整数，将自动转为浮点数；
-# - 不存在，将设为其他非零权重的平均值。
-#
-# 当所有权重的总和为 0 或 inf 时，将抛出错误。
-#
-# Float, representing the weight of the entry. When this field is:
-#
-# - 0, the entry will not be selected;
-# - nan, inf, or negative, it will be treated as 0;
-# - an integer, it will be converted to a floating-point number;
-# - missing, it will be set to the average of other non-zero weights.
-#
-# An error will be thrown when the sum of all weights is 0 or inf.
-#
-# ## `content`
-#
-# 字符串，代表条目的内容。
-#
-# String, representing the content of the entry.
+# If no value is found, the default value will be used.
 
 [messages]
+# 捕获 SIGINT 信号时显示的消息。
+#
+# Message displayed when catching the SIGINT signal.
 interrupt = "呐、桥豆麻袋 …… 已经「厌烦」吾辈了嘛？"
 
 [[quote]]
+# 可选字段，代表语录的权重。
+#
+# - 当该值为 nan、inf、负数或者零时，语录不会被选择。
+# - 当该值不存在时，将设为其他非零权重的平均值；当其他权重均为零时，将设为一。
+# - 当所有权重的总和为零或者溢出时，将抛出错误。
+#
+# Optional, representing the weight of the quote.
+#
+# - If the value is nan, inf, negative, or zero, the quote will not be selected.
+# - If the value is missing, it will be set to the average of other non-zero
+#   weights; if all other weights are zero, it will be set to one.
+# - An error will be thrown when the sum of all weights is zero or overflows.
 weight = 1
+
+# 语录本体。
+#
+# The quote itself.
 content = """
 诶多 …… ☆ 是 ♡ 同 ♡ 类 ♡ 呢 ♡ 喵 ♪（由乃逆光捧脸.jpg）
 那群八嘎是不会懂的呀 …… 关于「二次元の美好」♡
