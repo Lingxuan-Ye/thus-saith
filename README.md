@@ -1,27 +1,26 @@
 # Thus Saith My Waifu!
 
 [![Crates.io](https://img.shields.io/crates/v/thus-saith.svg)](https://crates.io/crates/thus-saith)
-[![Documentation](https://docs.rs/thus-saith/badge.svg)](https://docs.rs/thus-saith)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Thus saith my waifu, I mean it.
 
 ## Install
 
-```shell
+```
 cargo install thus-saith
 ```
 
 ## Usage
 
-```shell
+```
 Thus saith my waifu!
 
 Usage: thus-saith [OPTIONS]
 
 Options:
-  -m, --mean <NUMBER>     The average number of characters typed per minute [default: 2000]
-  -s, --std-dev <NUMBER>  The standard deviation of the number of characters typed per minute [default: 4000]
+      --mean <NUMBER>     The average time (in milliseconds) taken per character [default: 100]
+      --std-dev <NUMBER>  The standard deviation (in milliseconds) of the time taken per character [default: 100]
   -h, --help              Print help
   -V, --version           Print version
 ```
@@ -37,11 +36,11 @@ Configuration files are loaded in the following order
 
 If none of these exists, the default configuration will be used.
 
-Refer to the [default configuration file](./config/default.toml) for more information.
+Refer to the [default configuration file](./config/default.toml) for more details.
 
 ## Examples
 
-```shell
+```
 ❯ thus-saith
 啊嘞啊嘞 QAQ？多洗忒 …… 欧尼酱 ww？
 呐、桥豆麻袋 …… 已经「厌烦」吾辈了嘛？
@@ -50,7 +49,7 @@ Refer to the [default configuration file](./config/default.toml) for more inform
 快来「肯定」啊？不然呀 …… 咱可就要「黑化」了哦 ♪ 呐？
 ```
 
-```shell
+```
 ❯ thus-saith
 呐、二次元の民那 …… 都·是·最·最·善·良·の·存·在·呐 ☆
 多洗忒 …… 要「嘲笑」这样的孩子呢？吾辈不明白啊 ——
@@ -58,7 +57,7 @@ Refer to the [default configuration file](./config/default.toml) for more inform
 大人什么的、最·讨·厌·了 ★ ♪
 ```
 
-```shell
+```
 ❯ thus-saith --mean 8000 --std-dev 4000
 诶多 …… 看起来阁下对于「二·次·元」の理解、似·乎·满·是·谬·误·哦 ☆ ~
 嘛，连最为基本の「礼♪义♪廉♪耻♪」都早已失去了啊 …… ♪（笑）
