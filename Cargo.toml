@@ -17,5 +17,5 @@ ctrlc = "3.4.4"
 dirs = "5.0.1"
 rand = "0.8.5"
 rand_distr = "0.4.3"
-serde = { version = "1.0.203", features = ["derive"] }
+serde = { version = "1.0.204", features = ["derive"] }
 toml = "0.8.14"
