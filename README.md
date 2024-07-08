@@ -19,24 +19,21 @@ Thus saith my waifu!
 Usage: thus-saith [OPTIONS]
 
 Options:
-      --mean <NUMBER>     The average time (in milliseconds) taken per character [default: 100]
-      --std-dev <NUMBER>  The standard deviation (in milliseconds) of the time taken per character [default: 100]
+      --mean <NUMBER>     Average time per character (in ms) [default: 100]
+      --std-dev <NUMBER>  Standard deviation of time per character (in ms) [default: 100]
   -h, --help              Print help
   -V, --version           Print version
 ```
 
 ## Configuration
 
-Configuration files are loaded in the following order
-(or their equivalent paths in Windows):
+You can create a configuration file in the following locations (or their equivalent paths on Windows):
 
 1. `$PWD/thus-saith.toml`
 2. `$HOME/.thus-saith.toml`
 3. `$XDG_CONFIG_HOME/thus-saith/config.toml`
 
-If none of these exists, the default configuration will be used.
-
-Refer to the [default configuration file](./config/default.toml) for more details.
+If none of these files exist, don't worry, the [default configuration](./config/default.toml) will be used. Refer to this file for more details.
 
 ## Examples
 
@@ -58,13 +55,9 @@ Refer to the [default configuration file](./config/default.toml) for more detail
 ```
 
 ```
-❯ thus-saith --mean 8000 --std-dev 4000
+❯ thus-saith --mean 20 --std-dev 40
 诶多 …… 看起来阁下对于「二·次·元」の理解、似·乎·满·是·谬·误·哦 ☆ ~
 嘛，连最为基本の「礼♪义♪廉♪耻♪」都早已失去了啊 …… ♪（笑）
 呐，我说啊 —— 这样の kimino、也有自称「二 ♡ 次 ♡ 元」の资格吗 ★ ？
 fufufu —— 说到底、阁下已经「二·次·元·失·格」了吧？呐 ~ ♪
 ```
-
-## Future Plans
-
-- May improve documentation.
