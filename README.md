@@ -27,13 +27,13 @@ Options:
 
 ## Configuration
 
-You can create a configuration file in the following locations (or their equivalent paths on Windows):
+You can create configuration files at these locations (or their Windows equivalents):
 
-1. `$PWD/thus-saith.toml`
+1. `$XDG_CONFIG_HOME/thus-saith/config.toml`
 2. `$HOME/.thus-saith.toml`
-3. `$XDG_CONFIG_HOME/thus-saith/config.toml`
+3. `$PWD/thus-saith.toml`
 
-If none of these files exist, don't worry, the [default configuration](./config/default.toml) will be used. Refer to this file for more details.
+Refer to the [default configuration file](config/default.toml) for more details.
 
 ## Examples
 
