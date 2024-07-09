@@ -77,7 +77,6 @@ impl Config {
         Ok(config)
     }
 
-    #[allow(dead_code)]
     pub fn load_from_file(path: &Path) -> Result<Self> {
         let mut config = Config::load()?;
         config.update_from_file(path)?;
