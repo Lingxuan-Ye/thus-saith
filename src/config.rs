@@ -1,4 +1,4 @@
-use anyhow::{bail, ensure, Context, Result};
+use anyhow::{ensure, Context, Result};
 use serde::Deserialize;
 use std::env::current_dir;
 use std::fs::read_to_string;
@@ -98,20 +98,15 @@ impl Config {
             please consider fixing 'config/default.toml' \
             in the source code and recompiling the program";
 
-        let config: RaWConfig = toml::from_str(default).context(context)?;
+        let raw_config: RaWConfig = toml::from_str(default).context(context)?;
 
-        let messages = match config.messages {
-            None => bail!(context),
-            Some(messages) => match messages.interrupt {
-                None => bail!(context),
-                Some(interrupt) => Messages { interrupt },
-            },
+        let raw_messages = raw_config.messages.context(context)?;
+        let messages = Messages {
+            interrupt: raw_messages.interrupt.context(context)?,
         };
 
-        let quotes = match config.quotes {
-            None => bail!(context),
-            Some(quotes) => Config::normalize_quotes(quotes)?,
-        };
+        let raw_quotes = raw_config.quotes.context(context)?;
+        let quotes = Config::normalize_quotes(raw_quotes)?;
 
         Ok(Config { messages, quotes })
     }

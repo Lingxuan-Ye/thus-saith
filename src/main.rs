@@ -1,22 +1,23 @@
 use cli::Cli;
 use config::Config;
-use exit::{handle_interrupt, ExitOnError};
+use eoe::ExitOnError;
 use select::Selector;
+use signal::set_handler_for_sigint;
 use std::io::stdout;
 use tokenizer::Tokenizer;
 use typist::Typist;
 
 mod cli;
 mod config;
-mod exit;
 mod select;
+mod signal;
 mod tokenizer;
 mod typist;
 
 fn main() {
     let config = Config::load().exit_on_error();
 
-    handle_interrupt(config.messages.interrupt);
+    set_handler_for_sigint(config.messages.interrupt);
 
     let matches = Cli::new().get_matches();
 
