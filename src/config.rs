@@ -83,13 +83,6 @@ impl Config {
         Ok(config)
     }
 
-    #[allow(dead_code)]
-    pub fn load_from_str(string: &str) -> Result<Self> {
-        let mut config = Config::load()?;
-        config.update(toml::from_str(string).context("failed to parse the string")?)?;
-        Ok(config)
-    }
-
     pub fn load_default() -> Result<Self> {
         let default = include_str!("../config/default.toml");
         let context = "\
