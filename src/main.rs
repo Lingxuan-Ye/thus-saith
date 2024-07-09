@@ -1,6 +1,6 @@
 use cli::Cli;
 use config::Config;
-use exit::{handle_interrupt, ExitOnError};
+use eoe::ExitOnError;
 use select::Selector;
 use std::io::stdout;
 use tokenizer::Tokenizer;
