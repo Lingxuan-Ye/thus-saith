@@ -1,18 +1,17 @@
-# 各项设置将分别按照如下顺序寻找其第一个有效值：
+# 各项设置将按照如下顺序依次加载并逐级覆盖：
 #
-# 1. $PWD/thus-saith.toml
+# 0. 默认值（程序内嵌）
+# 1. $XDG_CONFIG_HOME/thus-saith/config.toml
 # 2. $HOME/.thus-saith.toml
-# 3. $XDG_CONFIG_HOME/thus-saith/config.toml
+# 3. $PWD/thus-saith.toml
 #
-# 如果有效值不存在，将使用其默认值。
+# Configuration items will be loaded in the following order,
+# each subsequent item overriding the preceding one.
 #
-# Each setting will be searched in the following order:
-#
-# 1. $PWD/thus-saith.toml
+# 0. Default value (embedded in the program)
+# 1. $XDG_CONFIG_HOME/thus-saith/config.toml
 # 2. $HOME/.thus-saith.toml
-# 3. $XDG_CONFIG_HOME/thus-saith/config.toml
-#
-# If no value is found, the default value will be used.
+# 3. $PWD/thus-saith.toml
 
 [messages]
 # 捕获 SIGINT 信号时显示的消息。

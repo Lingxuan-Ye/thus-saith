@@ -4,6 +4,7 @@ use eoe::ExitOnError;
 use select::Selector;
 use signal::set_handler_for_sigint;
 use std::io::stdout;
+use std::path::PathBuf;
 use tokenizer::Tokenizer;
 use typist::Typist;
 
@@ -15,11 +16,15 @@ mod tokenizer;
 mod typist;
 
 fn main() {
-    let config = Config::load().exit_on_error();
+    let matches = Cli::new().get_matches();
+
+    let file: Option<&PathBuf> = matches.get_one("config");
+    let config = match file {
+        Some(file) => Config::load_from_file(file).exit_on_error(),
+        None => Config::load().exit_on_error(),
+    };
 
     set_handler_for_sigint(config.messages.interrupt);
-
-    let matches = Cli::new().get_matches();
 
     let mean: f64 = *matches.get_one("mean").expect("will never fail");
     let std_dev: f64 = *matches.get_one("std-dev").expect("will never fail");
