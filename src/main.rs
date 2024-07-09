@@ -9,7 +9,6 @@ use typist::Typist;
 
 mod cli;
 mod config;
-mod exit;
 mod select;
 mod signal;
 mod tokenizer;
