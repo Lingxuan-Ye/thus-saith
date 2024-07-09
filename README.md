@@ -19,8 +19,9 @@ Thus saith my waifu!
 Usage: thus-saith [OPTIONS]
 
 Options:
-      --mean <NUMBER>     Average time per character (in ms) [default: 100]
-      --std-dev <NUMBER>  Standard deviation of time per character (in ms) [default: 100]
+      --mean <NUMBER>     Average time per character (unit: ms) [default: 100]
+      --std-dev <NUMBER>  Standard deviation of time per character (unit: ms) [default: 100]
+      --config <FILE>     Load the specified configuration file
   -h, --help              Print help
   -V, --version           Print version
 ```
@@ -47,7 +48,7 @@ Refer to the [default configuration file](config/default.toml) for more details.
 ```
 
 ```
-❯ thus-saith
+❯ thus-saith --mean 20 --std-dev 40
 呐、二次元の民那 …… 都·是·最·最·善·良·の·存·在·呐 ☆
 多洗忒 …… 要「嘲笑」这样的孩子呢？吾辈不明白啊 ——
 嘛 …… 说到底，你们都只是污秽の「来自三次元的大人」吧？
@@ -55,7 +56,18 @@ Refer to the [default configuration file](config/default.toml) for more details.
 ```
 
 ```
-❯ thus-saith --mean 20 --std-dev 40
+❯ echo << HERE > foo.bar
+[[quote]]
+weight = 1
+content = """
+诶多 …… 看起来阁下对于「二·次·元」の理解、似·乎·满·是·谬·误·哦 ☆ ~
+嘛，连最为基本の「礼♪义♪廉♪耻♪」都早已失去了啊 …… ♪（笑）
+呐，我说啊 —— 这样の kimino、也有自称「二 ♡ 次 ♡ 元」の资格吗 ★ ？
+fufufu —— 说到底、阁下已经「二·次·元·失·格」了吧？呐 ~ ♪
+"""
+HERE
+
+❯ thus-saith --config foo.bar
 诶多 …… 看起来阁下对于「二·次·元」の理解、似·乎·满·是·谬·误·哦 ☆ ~
 嘛，连最为基本の「礼♪义♪廉♪耻♪」都早已失去了啊 …… ♪（笑）
 呐，我说啊 —— 这样の kimino、也有自称「二 ♡ 次 ♡ 元」の资格吗 ★ ？
