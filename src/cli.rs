@@ -11,12 +11,13 @@ impl Cli {
                 .value_name("NUMBER")
                 .value_parser(value_parser!(f64))
                 .default_value("100")
-                .help("Average time per character (in ms)"),
+                .help("Average time per character (unit: ms)"),
             Arg::new("std-dev")
                 .long("std-dev")
                 .value_name("NUMBER")
                 .value_parser(value_parser!(f64))
                 .default_value("100")
+                .help("Standard deviation of time per character (unit: ms)"),
             Arg::new("config")
                 .long("config")
                 .value_name("FILE")
