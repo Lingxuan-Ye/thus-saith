@@ -41,7 +41,7 @@ impl Quote {
 pub struct Config {
     pub messages: Messages,
 
-    /// # Guarantee
+    /// # Guarantees
     ///
     /// - Non-empty.
     /// - All quotes have a positive finite weight.
