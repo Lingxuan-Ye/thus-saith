@@ -169,17 +169,20 @@ impl TryFrom<Vec<RawQuote>> for QuotePool {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
 struct RawMessages {
     interrupt: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
 struct RawQuote {
     weight: Option<f64>,
     content: String,
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
 struct RaWConfig {
     messages: Option<RawMessages>,
 
