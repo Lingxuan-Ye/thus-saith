@@ -1,15 +1,14 @@
+use super::config::Messages;
 use ansi_term::Colour::Yellow;
-use anyhow::Context;
-use eoe::ExitOnError;
+use anyhow::{Context, Result};
 use std::process::exit;
 
-pub fn set_handler_for_sigint(message: String) {
+pub(crate) fn set_handler(message: Messages) -> Result<()> {
     ctrlc::set_handler(move || {
         eprintln!();
         eprintln!();
-        eprintln!("{}", Yellow.bold().paint(&message));
+        eprintln!("{}", Yellow.bold().paint(&message.interrupt));
         exit(1);
     })
     .context("system error occurred")
-    .exit_on_error();
 }

@@ -1,17 +1,18 @@
-# 各项设置将按照如下顺序依次加载并逐级覆盖：
+# 配置文件的优先级如下：
 #
-# 0. 默认值（程序内嵌）
+# 0. $PWD/thus-saith.toml
 # 1. $XDG_CONFIG_HOME/thus-saith/config.toml
-# 2. $HOME/.thus-saith.toml
-# 3. $PWD/thus-saith.toml
+# 2. 默认值（程序内嵌）
 #
-# Configuration items will be loaded in the following order,
-# each subsequent item overriding the preceding one.
+# 未指定的配置项将使用回退值。
 #
-# 0. Default value (embedded in the program)
+# The configuration file priority is as follows:
+#
+# 0. $PWD/thus-saith.toml
 # 1. $XDG_CONFIG_HOME/thus-saith/config.toml
-# 2. $HOME/.thus-saith.toml
-# 3. $PWD/thus-saith.toml
+# 2. Default (embedded in the program)
+#
+# Unspecified configuration items will use fallback values.
 
 [messages]
 # 捕获 SIGINT 信号时显示的消息。
@@ -20,18 +21,19 @@
 interrupt = "呐、桥豆麻袋 …… 已经「厌烦」吾辈了嘛？"
 
 [[quote]]
-# 可选字段，代表语录的权重。
+# 语录权重（可选字段）。
 #
-# - 当该值为 nan、inf、负数或者零时，语录不会被选择。
-# - 当该值不存在时，将设为其他非零权重的平均值；当其他权重均为零时，将设为一。
-# - 当所有权重的总和为零或者溢出时，将抛出错误。
+# - 值为 nan、inf、负数或零时，权重无效，语录不会被选取。
+# - 值不存在时，权重设为有效权重的平均值；所有权重均无效时，权重设为一。
+# - 权重总和为零或溢出时，程序中止。
 #
-# Optional, representing the weight of the quote.
+# The quote weight (optional field).
 #
-# - If the value is nan, inf, negative, or zero, the quote will not be selected.
-# - If the value is missing, it will be set to the average of other non-zero
-#   weights; if all other weights are zero, it will be set to one.
-# - An error will be thrown when the sum of all weights is zero or overflows.
+# - If the value is nan, inf, negative, or zero, the weight is invalid, and
+#   the quote will not be selected.
+# - If the value is missing, the weight set to the average of valid weights;
+#   if all weights are invalid, it is set to one.
+# - If the sum of weights is zero or overflows, the program aborts.
 weight = 1
 
 # 语录本体。

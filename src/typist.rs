@@ -1,19 +1,19 @@
 use ansi_term::Colour::Yellow;
-use anyhow::{ensure, Context, Result};
+use anyhow::{Context, Result, ensure};
 use rand::prelude::*;
 use rand_distr::LogNormal;
 use std::fmt::Display;
 use std::io::Write;
 use std::time::{Duration, Instant};
 
-pub struct Typist {
+pub(crate) struct Typist {
     /// The distribution of the milliseconds taken per character.
     distribution: LogNormal<f64>,
     rng: ThreadRng,
 }
 
 impl Typist {
-    pub fn with_millis_per_char(mean: f64, std_dev: f64) -> Result<Self> {
+    pub(crate) fn with_millis_per_char(mean: f64, std_dev: f64) -> Result<Self> {
         Self::sanity_check(mean, std_dev)?;
         let variance = (std_dev.powi(2) / mean.powi(2) + 1.0).ln();
         ensure!(variance.is_finite(), "calculation overflows");
@@ -25,7 +25,7 @@ impl Typist {
     }
 
     #[allow(dead_code)]
-    pub fn with_chars_per_min(mean: f64, std_dev: f64) -> Result<Self> {
+    pub(crate) fn with_chars_per_min(mean: f64, std_dev: f64) -> Result<Self> {
         Self::sanity_check(mean, std_dev)?;
         // Pretty much sure that the formula is mathematically correct.
         // However, as the `std_dev` increases, the resulting `mean`
@@ -42,7 +42,7 @@ impl Typist {
 
     /// In this context, a `char` means a valid Unicode character,
     /// with or without ANSI escape codes.
-    pub fn type_out<C, I, W>(&mut self, chars: I, mut output: W) -> Result<&mut Self>
+    pub(crate) fn type_out<C, I, W>(&mut self, chars: I, mut output: W) -> Result<&mut Self>
     where
         C: Display,
         I: IntoIterator<Item = C>,
