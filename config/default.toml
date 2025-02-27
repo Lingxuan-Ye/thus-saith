@@ -1,17 +1,20 @@
-# 各项设置将按照如下顺序依次加载并逐级覆盖：
+# 配置文件的优先级如下：
 #
-# 0. 默认值（程序内嵌）
-# 1. $XDG_CONFIG_HOME/thus-saith/config.toml
-# 2. $HOME/.thus-saith.toml
-# 3. $PWD/thus-saith.toml
+# 0. $PWD/thus-saith.toml
+# 1. $HOME/.thus-saith.toml
+# 2. $XDG_CONFIG_HOME/thus-saith/config.toml
+# 3. 默认值（程序内嵌）
 #
-# Configuration items will be loaded in the following order,
-# each subsequent item overriding the preceding one.
+# 未指定的配置项将使用回退值。
 #
-# 0. Default value (embedded in the program)
-# 1. $XDG_CONFIG_HOME/thus-saith/config.toml
-# 2. $HOME/.thus-saith.toml
-# 3. $PWD/thus-saith.toml
+# The configuration file priority is as follows:
+#
+# 0. $PWD/thus-saith.toml
+# 1. $HOME/.thus-saith.toml
+# 2. $XDG_CONFIG_HOME/thus-saith/config.toml
+# 3. Default (embedded in the program)
+#
+# Unspecified configuration items will use fallback values.
 
 [messages]
 # 捕获 SIGINT 信号时显示的消息。
