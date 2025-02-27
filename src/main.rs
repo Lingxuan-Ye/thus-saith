@@ -1,4 +1,4 @@
-use self::cli::Cli;
+use self::cli::{Args, build_command};
 use self::config::Config;
 use self::select::Selector;
 use self::signal::set_handler_for_sigint;
@@ -7,7 +7,6 @@ use self::typist::Typist;
 use anyhow::Result;
 use eoe::ExitOnError;
 use std::io::stdout;
-use std::path::PathBuf;
 
 mod cli;
 mod config;
@@ -17,23 +16,18 @@ mod tokenizer;
 mod typist;
 
 fn execute() -> Result<()> {
-    let matches = Cli::new().get_matches();
+    let command = build_command();
+    let matches = command.get_matches();
+    let args = Args::from_matches(&matches);
 
-    let file: Option<&PathBuf> = matches.get_one("config");
-    let config = match file {
+    let config = match args.config {
         Some(file) => Config::load_from_file(file)?,
         None => Config::load()?,
     };
 
     set_handler_for_sigint(config.messages.interrupt);
 
-    let Some(&mean): Option<&f64> = matches.get_one("mean") else {
-        unreachable!()
-    };
-    let Some(&std_dev): Option<&f64> = matches.get_one("std-dev") else {
-        unreachable!()
-    };
-    let mut typist = Typist::with_millis_per_char(mean, std_dev)?;
+    let mut typist = Typist::with_millis_per_char(args.mean, args.std_dev)?;
 
     let quote = Selector::select(&config.quotes)?;
     let chars = Tokenizer::tokenize(quote);
