@@ -1,18 +1,16 @@
 # 配置文件的优先级如下：
 #
 # 0. $PWD/thus-saith.toml
-# 1. $HOME/.thus-saith.toml
-# 2. $XDG_CONFIG_HOME/thus-saith/config.toml
-# 3. 默认值（程序内嵌）
+# 1. $XDG_CONFIG_HOME/thus-saith/config.toml
+# 2. 默认值（程序内嵌）
 #
 # 未指定的配置项将使用回退值。
 #
 # The configuration file priority is as follows:
 #
 # 0. $PWD/thus-saith.toml
-# 1. $HOME/.thus-saith.toml
-# 2. $XDG_CONFIG_HOME/thus-saith/config.toml
-# 3. Default (embedded in the program)
+# 1. $XDG_CONFIG_HOME/thus-saith/config.toml
+# 2. Default (embedded in the program)
 #
 # Unspecified configuration items will use fallback values.
 

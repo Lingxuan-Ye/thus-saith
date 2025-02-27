@@ -30,9 +30,8 @@ Options:
 
 You can create configuration files at these locations (or their Windows equivalents):
 
-1. `$XDG_CONFIG_HOME/thus-saith/config.toml`
-2. `$HOME/.thus-saith.toml`
-3. `$PWD/thus-saith.toml`
+1. `$PWD/thus-saith.toml`
+2. `$XDG_CONFIG_HOME/thus-saith/config.toml`
 
 Refer to the [default configuration file](config/default.toml) for more details.
 

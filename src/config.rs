@@ -1,4 +1,5 @@
 use anyhow::{ensure, Context, Result};
+use dirs::config_dir;
 use serde::Deserialize;
 use std::env::current_dir;
 use std::fs::read_to_string;
@@ -53,15 +54,8 @@ impl Config {
     pub fn load() -> Result<Self> {
         let mut config = Config::load_default()?;
 
-        if let Some(mut path) = dirs::config_dir() {
+        if let Some(mut path) = config_dir() {
             path.push("thus-saith/config.toml");
-            if path.exists() {
-                config.update_from_file(&path)?;
-            }
-        }
-
-        if let Some(mut path) = dirs::home_dir() {
-            path.push(".thus-saith.toml");
             if path.exists() {
                 config.update_from_file(&path)?;
             }
