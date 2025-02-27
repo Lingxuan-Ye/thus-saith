@@ -1,7 +1,7 @@
 use self::cli::{Args, build_command};
 use self::config::Config;
 use self::select::Selector;
-use self::signal::set_handler_for_sigint;
+use self::signal::set_handler;
 use self::tokenizer::Tokenizer;
 use self::typist::Typist;
 use anyhow::Result;
@@ -25,7 +25,7 @@ fn execute() -> Result<()> {
         None => Config::load()?,
     };
 
-    set_handler_for_sigint(config.messages.interrupt);
+    set_handler(config.messages)?;
 
     let mut typist = Typist::with_millis_per_char(args.mean, args.std_dev)?;
 
