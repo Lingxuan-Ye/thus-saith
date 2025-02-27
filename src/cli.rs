@@ -1,4 +1,4 @@
-use clap::{command, value_parser, Arg, ArgMatches, Command, ValueHint};
+use clap::{Arg, ArgMatches, Command, ValueHint, command, value_parser};
 use std::path::PathBuf;
 
 pub struct Cli(Command);

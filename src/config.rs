@@ -1,4 +1,4 @@
-use anyhow::{ensure, Context, Result};
+use anyhow::{Context, Result, ensure};
 use dirs::config_dir;
 use serde::Deserialize;
 use std::env::current_dir;

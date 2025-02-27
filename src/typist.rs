@@ -1,5 +1,5 @@
 use ansi_term::Colour::Yellow;
-use anyhow::{ensure, Context, Result};
+use anyhow::{Context, Result, ensure};
 use rand::prelude::*;
 use rand_distr::LogNormal;
 use std::fmt::Display;
