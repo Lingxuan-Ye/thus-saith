@@ -1,116 +1,76 @@
-use anyhow::{Context, Result, ensure};
-use dirs::config_dir;
+use anyhow::{Context, Error, Result, ensure};
+use rand::prelude::*;
+use rand_distr::WeightedIndex;
 use serde::Deserialize;
-use std::env::current_dir;
-use std::fs::read_to_string;
+use std::env;
+use std::fs;
 use std::path::Path;
-
-#[derive(Debug, Deserialize)]
-struct RawMessages {
-    interrupt: Option<String>,
-}
-
-#[derive(Debug, Deserialize)]
-struct RawQuote {
-    weight: Option<f64>,
-    content: String,
-}
-
-#[derive(Debug, Deserialize)]
-struct RaWConfig {
-    messages: Option<RawMessages>,
-
-    #[serde(rename = "quote")]
-    quotes: Option<Vec<RawQuote>>,
-}
-
-pub(crate) struct Messages {
-    pub(crate) interrupt: String,
-}
-
-pub(crate) struct Quote {
-    weight: f64,
-    pub(crate) content: String,
-}
-
-impl Quote {
-    pub(crate) fn weight(&self) -> f64 {
-        self.weight
-    }
-}
 
 pub(crate) struct Config {
     pub(crate) messages: Messages,
-
-    /// # Guarantees
-    ///
-    /// - Non-empty.
-    /// - All quotes have a positive finite weight.
-    /// - The sum of all weights is finite.
-    pub(crate) quotes: Vec<Quote>,
+    pub(crate) quotes: QuotePool,
 }
 
 impl Config {
     pub(crate) fn load() -> Result<Self> {
         let mut config = Config::load_default()?;
 
-        if let Some(mut path) = config_dir() {
+        if let Some(mut path) = dirs::config_dir() {
             path.push("thus-saith/config.toml");
             if path.exists() {
-                config.update_from_file(&path)?;
+                config.update(&path)?;
             }
         }
 
-        if let Ok(mut path) = current_dir() {
+        if let Ok(mut path) = env::current_dir() {
             path.push("thus-saith.toml");
             if path.exists() {
-                config.update_from_file(&path)?;
+                config.update(&path)?;
             }
         }
 
         Ok(config)
     }
 
-    pub(crate) fn load_from_file(path: &Path) -> Result<Self> {
+    pub(crate) fn load_from(path: &Path) -> Result<Self> {
         let mut config = Config::load()?;
-        config.update_from_file(path)?;
+        config.update(path)?;
         Ok(config)
     }
 
-    pub(crate) fn load_default() -> Result<Self> {
+    fn load_default() -> Result<Self> {
         let default = include_str!("../config/default.toml");
         let context = "\
             failed to parse the default configuration, \
             please consider fixing 'config/default.toml' \
             in the source code and recompiling the program";
 
-        let raw_config: RaWConfig = toml::from_str(default).context(context)?;
+        let config: RaWConfig = toml::from_str(default).context(context)?;
 
-        let raw_messages = raw_config.messages.context(context)?;
-        let messages = Messages {
-            interrupt: raw_messages.interrupt.context(context)?,
-        };
+        let interrupt = config
+            .messages
+            .and_then(|messages| messages.interrupt)
+            .context(context)?;
+        let messages = Messages { interrupt };
 
-        let raw_quotes = raw_config.quotes.context(context)?;
-        let quotes = Config::normalize_quotes(raw_quotes)?;
+        let quotes = config
+            .quotes
+            .context(context)?
+            .try_into()
+            .context(context)?;
 
         Ok(Config { messages, quotes })
     }
 
-    fn update_from_file(&mut self, path: &Path) -> Result<&mut Self> {
-        ensure!(path.is_file(), "'{}' is not a file", path.display());
+    fn update(&mut self, path: &Path) -> Result<&mut Self> {
+        let path_repr = path.display();
 
+        ensure!(path.is_file(), "'{}' is not a file", path_repr);
         let string =
-            read_to_string(path).with_context(|| format!("failed to read '{}'", path.display()))?;
+            fs::read_to_string(path).with_context(|| format!("failed to read '{}'", path_repr))?;
+        let config: RaWConfig =
+            toml::from_str(&string).with_context(|| format!("failed to parse '{}'", path_repr))?;
 
-        let config = toml::from_str(&string)
-            .with_context(|| format!("failed to parse '{}'", path.display()))?;
-
-        self.update(config)
-            .with_context(|| format!("failed to normalize quotes from '{}'", path.display()))
-    }
-
-    fn update(&mut self, config: RaWConfig) -> Result<&mut Self> {
         if let Some(messages) = config.messages {
             if let Some(interrupt) = messages.interrupt {
                 self.messages.interrupt = interrupt;
@@ -118,18 +78,51 @@ impl Config {
         }
 
         if let Some(quotes) = config.quotes {
-            self.quotes = Config::normalize_quotes(quotes)?;
+            self.quotes = quotes
+                .try_into()
+                .with_context(|| format!("failed to normalize quotes from '{}'", path_repr))?;
         }
 
         Ok(self)
     }
+}
 
-    fn normalize_quotes(quotes: Vec<RawQuote>) -> Result<Vec<Quote>> {
-        let mut normalized = Vec::with_capacity(quotes.len());
+pub(crate) struct Messages {
+    pub(crate) interrupt: String,
+}
+
+struct Quote {
+    weight: f64,
+    content: String,
+}
+
+/// # Guarantees
+///
+/// - Non-empty.
+/// - All quotes have a positive finite weight.
+/// - The sum of all weights is finite.
+pub(crate) struct QuotePool(Vec<Quote>);
+
+impl QuotePool {
+    pub(crate) fn sample(&self) -> &str {
+        let weights = self.0.iter().map(|quote| quote.weight);
+        let Ok(distribution) = WeightedIndex::new(weights) else {
+            unreachable!()
+        };
+        let index = thread_rng().sample(distribution);
+        &self.0[index].content
+    }
+}
+
+impl TryFrom<Vec<RawQuote>> for QuotePool {
+    type Error = Error;
+
+    fn try_from(value: Vec<RawQuote>) -> Result<Self> {
+        let mut normalized = Vec::with_capacity(value.len());
         let mut unweighted = Vec::new();
         let mut total_weight = 0.0;
 
-        for quote in quotes {
+        for quote in value {
             match quote.weight {
                 None => {
                     unweighted.push(quote);
@@ -171,6 +164,25 @@ impl Config {
         ensure!(total_weight != 0.0, "no valid quotes found");
         ensure!(total_weight.is_finite(), "total weight overflows");
 
-        Ok(normalized)
+        Ok(Self(normalized))
     }
+}
+
+#[derive(Debug, Deserialize)]
+struct RawMessages {
+    interrupt: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+struct RawQuote {
+    weight: Option<f64>,
+    content: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct RaWConfig {
+    messages: Option<RawMessages>,
+
+    #[serde(rename = "quote")]
+    quotes: Option<Vec<RawQuote>>,
 }
