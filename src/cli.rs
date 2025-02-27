@@ -1,7 +1,7 @@
 use clap::{Arg, ArgMatches, Command, ValueHint, command, value_parser};
 use std::path::PathBuf;
 
-pub(crate) fn build_command() -> Command {
+pub fn build_command() -> Command {
     command!().args([
         Arg::new("mean")
             .long("mean")
@@ -24,14 +24,14 @@ pub(crate) fn build_command() -> Command {
     ])
 }
 
-pub(crate) struct Args<'a> {
-    pub(crate) mean: f64,
-    pub(crate) std_dev: f64,
-    pub(crate) config: Option<&'a PathBuf>,
+pub struct Args<'a> {
+    pub mean: f64,
+    pub std_dev: f64,
+    pub config: Option<&'a PathBuf>,
 }
 
 impl<'a> Args<'a> {
-    pub(crate) fn from_matches(matches: &'a ArgMatches) -> Self {
+    pub fn from_matches(matches: &'a ArgMatches) -> Self {
         let Some(&mean) = matches.get_one::<f64>("mean") else {
             unreachable!()
         };

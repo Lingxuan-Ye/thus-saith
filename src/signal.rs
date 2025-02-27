@@ -3,7 +3,7 @@ use ansi_term::Colour::Yellow;
 use anyhow::{Context, Result};
 use std::process::exit;
 
-pub(crate) fn set_handler(message: Messages) -> Result<()> {
+pub fn set_handler(message: Messages) -> Result<()> {
     ctrlc::set_handler(move || {
         eprintln!();
         eprintln!();

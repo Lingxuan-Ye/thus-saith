@@ -6,13 +6,13 @@ use std::env;
 use std::fs;
 use std::path::Path;
 
-pub(crate) struct Config {
-    pub(crate) messages: Messages,
-    pub(crate) quotes: QuotePool,
+pub struct Config {
+    pub messages: Messages,
+    pub quotes: QuotePool,
 }
 
 impl Config {
-    pub(crate) fn load() -> Result<Self> {
+    pub fn load() -> Result<Self> {
         let mut config = Config::load_default()?;
 
         if let Some(mut path) = dirs::config_dir() {
@@ -32,7 +32,7 @@ impl Config {
         Ok(config)
     }
 
-    pub(crate) fn load_from(path: &Path) -> Result<Self> {
+    pub fn load_from(path: &Path) -> Result<Self> {
         let mut config = Config::load()?;
         config.update(path)?;
         Ok(config)
@@ -87,8 +87,8 @@ impl Config {
     }
 }
 
-pub(crate) struct Messages {
-    pub(crate) interrupt: String,
+pub struct Messages {
+    pub interrupt: String,
 }
 
 struct Quote {
@@ -101,10 +101,10 @@ struct Quote {
 /// - Non-empty.
 /// - All quotes have a positive finite weight.
 /// - The sum of all weights is finite.
-pub(crate) struct QuotePool(Vec<Quote>);
+pub struct QuotePool(Vec<Quote>);
 
 impl QuotePool {
-    pub(crate) fn sample(&self) -> &str {
+    pub fn sample(&self) -> &str {
         let weights = self.0.iter().map(|quote| quote.weight);
         let Ok(distribution) = WeightedIndex::new(weights) else {
             unreachable!()
