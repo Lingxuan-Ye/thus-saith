@@ -1,13 +1,13 @@
+use self::cli::Cli;
+use self::config::Config;
+use self::select::Selector;
+use self::signal::set_handler_for_sigint;
+use self::tokenizer::Tokenizer;
+use self::typist::Typist;
 use anyhow::Result;
-use cli::Cli;
-use config::Config;
 use eoe::ExitOnError;
-use select::Selector;
-use signal::set_handler_for_sigint;
 use std::io::stdout;
 use std::path::PathBuf;
-use tokenizer::Tokenizer;
-use typist::Typist;
 
 mod cli;
 mod config;
