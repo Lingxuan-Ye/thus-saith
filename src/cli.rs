@@ -1,10 +1,10 @@
 use clap::{Arg, ArgMatches, Command, ValueHint, command, value_parser};
 use std::path::PathBuf;
 
-pub struct Cli(Command);
+pub(crate) struct Cli(Command);
 
 impl Cli {
-    pub fn new() -> Self {
+    pub(crate) fn new() -> Self {
         let command = command!().args([
             Arg::new("mean")
                 .long("mean")
@@ -28,7 +28,7 @@ impl Cli {
         Self(command)
     }
 
-    pub fn get_matches(self) -> ArgMatches {
+    pub(crate) fn get_matches(self) -> ArgMatches {
         self.0.get_matches()
     }
 }

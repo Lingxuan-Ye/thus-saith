@@ -24,34 +24,34 @@ struct RaWConfig {
     quotes: Option<Vec<RawQuote>>,
 }
 
-pub struct Messages {
-    pub interrupt: String,
+pub(crate) struct Messages {
+    pub(crate) interrupt: String,
 }
 
-pub struct Quote {
+pub(crate) struct Quote {
     weight: f64,
-    pub content: String,
+    pub(crate) content: String,
 }
 
 impl Quote {
-    pub fn weight(&self) -> f64 {
+    pub(crate) fn weight(&self) -> f64 {
         self.weight
     }
 }
 
-pub struct Config {
-    pub messages: Messages,
+pub(crate) struct Config {
+    pub(crate) messages: Messages,
 
     /// # Guarantees
     ///
     /// - Non-empty.
     /// - All quotes have a positive finite weight.
     /// - The sum of all weights is finite.
-    pub quotes: Vec<Quote>,
+    pub(crate) quotes: Vec<Quote>,
 }
 
 impl Config {
-    pub fn load() -> Result<Self> {
+    pub(crate) fn load() -> Result<Self> {
         let mut config = Config::load_default()?;
 
         if let Some(mut path) = config_dir() {
@@ -71,13 +71,13 @@ impl Config {
         Ok(config)
     }
 
-    pub fn load_from_file(path: &Path) -> Result<Self> {
+    pub(crate) fn load_from_file(path: &Path) -> Result<Self> {
         let mut config = Config::load()?;
         config.update_from_file(path)?;
         Ok(config)
     }
 
-    pub fn load_default() -> Result<Self> {
+    pub(crate) fn load_default() -> Result<Self> {
         let default = include_str!("../config/default.toml");
         let context = "\
             failed to parse the default configuration, \

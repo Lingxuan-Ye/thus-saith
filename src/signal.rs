@@ -3,7 +3,7 @@ use anyhow::Context;
 use eoe::ExitOnError;
 use std::process::exit;
 
-pub fn set_handler_for_sigint(message: String) {
+pub(crate) fn set_handler_for_sigint(message: String) {
     ctrlc::set_handler(move || {
         eprintln!();
         eprintln!();
