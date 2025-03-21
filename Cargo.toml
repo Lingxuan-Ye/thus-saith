@@ -14,9 +14,9 @@ ansi_term = "0.12.1"
 anyhow = "1.0.96"
 clap = { version = "4.5.31", features = ["cargo"] }
 ctrlc = "3.4.5"
-dirs = "5.0.1"
-eoe = "0.1.2"
-rand = "0.8.5"
-rand_distr = "0.4.3"
-serde = { version = "1.0.218", features = ["derive"] }
+dirs = "6.0.0"
+eoe = "0.3.1"
+rand = "0.9.0"
+rand_distr = "0.5.1"
+serde = { version = "1.0.219", features = ["derive"] }
 toml = "0.8.20"

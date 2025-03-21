@@ -1,6 +1,6 @@
 use anyhow::{Context, Error, Result, ensure};
 use rand::prelude::*;
-use rand_distr::WeightedIndex;
+use rand_distr::weighted::WeightedIndex;
 use serde::Deserialize;
 use std::env;
 use std::fs;
@@ -109,7 +109,7 @@ impl QuotePool {
         let Ok(distribution) = WeightedIndex::new(weights) else {
             unreachable!()
         };
-        let index = thread_rng().sample(distribution);
+        let index = rand::rng().sample(distribution);
         &self.0[index].content
     }
 }

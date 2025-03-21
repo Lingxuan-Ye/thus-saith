@@ -20,7 +20,7 @@ impl Typist {
         let mu = mean.ln() - 0.5 * variance;
         let sigma = variance.sqrt();
         let distribution = LogNormal::new(mu, sigma).context("unexpected error")?;
-        let rng = thread_rng();
+        let rng = rand::rng();
         Ok(Self { distribution, rng })
     }
 
@@ -36,7 +36,7 @@ impl Typist {
         let mu = -(mean / 60000.0).ln() + 0.5 * variance;
         let sigma = variance.sqrt();
         let distribution = LogNormal::new(mu, sigma).context("unexpected error")?;
-        let rng = thread_rng();
+        let rng = rand::rng();
         Ok(Self { distribution, rng })
     }
 
