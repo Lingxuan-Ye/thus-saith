@@ -56,6 +56,7 @@ impl Typist {
             write!(output, "{char}")?;
             output.flush()?;
         }
+        writeln!(output)?;
         Ok(self)
     }
 
