@@ -14,7 +14,7 @@
 #
 # Unspecified configuration items will use fallback values.
 
-[distribution]
+[pace]
 # 每字符平均用时（单位：毫秒）。
 #
 # - 值为 nan、inf、负数或零，且未被覆盖时，程序终止。

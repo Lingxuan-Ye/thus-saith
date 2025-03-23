@@ -8,7 +8,7 @@ use std::time::{Duration, Instant};
 
 pub struct Typist {
     /// The distribution of the milliseconds taken per character.
-    distribution: LogNormal<f64>,
+    distr: LogNormal<f64>,
     rng: ThreadRng,
 }
 
@@ -19,9 +19,9 @@ impl Typist {
         ensure!(variance.is_finite(), "calculation overflows");
         let mu = mean.ln() - 0.5 * variance;
         let sigma = variance.sqrt();
-        let distribution = LogNormal::new(mu, sigma).context("unexpected error")?;
+        let distr = LogNormal::new(mu, sigma).context("unexpected error")?;
         let rng = rand::rng();
-        Ok(Self { distribution, rng })
+        Ok(Self { distr, rng })
     }
 
     #[allow(dead_code)]
@@ -35,9 +35,9 @@ impl Typist {
         ensure!(variance.is_finite(), "calculation overflows");
         let mu = -(mean / 60000.0).ln() + 0.5 * variance;
         let sigma = variance.sqrt();
-        let distribution = LogNormal::new(mu, sigma).context("unexpected error")?;
+        let distr = LogNormal::new(mu, sigma).context("unexpected error")?;
         let rng = rand::rng();
-        Ok(Self { distribution, rng })
+        Ok(Self { distr, rng })
     }
 
     /// In this context, a `char` means a valid Unicode character,
@@ -49,7 +49,7 @@ impl Typist {
         W: Write,
     {
         for char in chars {
-            let sampled = self.rng.sample(self.distribution);
+            let sampled = self.rng.sample(self.distr);
             let duration = Duration::from_secs_f64(sampled / 1000.0);
             let start = Instant::now();
             while start.elapsed() < duration {}

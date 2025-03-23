@@ -9,12 +9,12 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 pub struct Config {
-    pub distribution: Distribution,
+    pub pace: Pace,
     pub messages: Messages,
     pub quotes: QuotePool,
 }
 
-pub struct Distribution {
+pub struct Pace {
     mean: f64,
     stddev: f64,
 }
@@ -58,11 +58,11 @@ impl Config {
         }
 
         if let Some(mean) = MATCHES.get_one::<f64>("mean") {
-            config.distribution.mean = *mean;
+            config.pace.mean = *mean;
         }
 
         if let Some(stddev) = MATCHES.get_one::<f64>("stddev") {
-            config.distribution.stddev = *stddev;
+            config.pace.stddev = *stddev;
         }
 
         Ok(config)
@@ -77,10 +77,10 @@ impl Config {
 
         let config: RawConfig = toml::from_str(DEFAULT).context(CONTEXT)?;
 
-        let distribution = config.distribution.context(CONTEXT)?;
-        let distribution = Distribution {
-            mean: distribution.mean.context(CONTEXT)?,
-            stddev: distribution.stddev.context(CONTEXT)?,
+        let pace = config.pace.context(CONTEXT)?;
+        let pace = Pace {
+            mean: pace.mean.context(CONTEXT)?,
+            stddev: pace.stddev.context(CONTEXT)?,
         };
 
         let messages = config.messages.context(CONTEXT)?;
@@ -92,7 +92,7 @@ impl Config {
         let quotes = quotes.try_into().context(CONTEXT)?;
 
         Ok(Config {
-            distribution,
+            pace,
             messages,
             quotes,
         })
@@ -107,8 +107,8 @@ impl Config {
         let config: RawConfig =
             toml::from_str(&string).with_context(|| format!("failed to parse '{}'", path_repr))?;
 
-        if let Some(distribution) = config.distribution {
-            self.distribution.update(distribution);
+        if let Some(pace) = config.pace {
+            self.pace.update(pace);
         }
         if let Some(messages) = config.messages {
             self.messages.update(messages);
@@ -123,7 +123,7 @@ impl Config {
     }
 }
 
-impl Distribution {
+impl Pace {
     pub fn mean(&self) -> Result<f64> {
         ensure!(
             !self.mean.is_nan() && self.mean.is_finite() && self.mean > 0.0,
@@ -142,11 +142,11 @@ impl Distribution {
         Ok(self.stddev)
     }
 
-    fn update(&mut self, distribution: RawDistribution) -> &mut Self {
-        if let Some(mean) = distribution.mean {
+    fn update(&mut self, pace: RawPace) -> &mut Self {
+        if let Some(mean) = pace.mean {
             self.mean = mean;
         }
-        if let Some(stddev) = distribution.stddev {
+        if let Some(stddev) = pace.stddev {
             self.stddev = stddev;
         }
         self
@@ -165,10 +165,10 @@ impl Messages {
 impl QuotePool {
     pub fn choose(&self) -> &str {
         let weights = self.0.iter().map(|quote| quote.weight);
-        let Ok(distribution) = WeightedIndex::new(weights) else {
+        let Ok(distr) = WeightedIndex::new(weights) else {
             unreachable!()
         };
-        let index = rand::rng().sample(distribution);
+        let index = rand::rng().sample(distr);
         &self.0[index].content
     }
 }
@@ -230,7 +230,7 @@ impl TryFrom<Vec<RawQuote>> for QuotePool {
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
 struct RawConfig {
-    distribution: Option<RawDistribution>,
+    pace: Option<RawPace>,
     messages: Option<RawMessages>,
     #[serde(rename = "quote")]
     quotes: Option<Vec<RawQuote>>,
@@ -238,7 +238,7 @@ struct RawConfig {
 
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
-struct RawDistribution {
+struct RawPace {
     mean: Option<f64>,
     stddev: Option<f64>,
 }
