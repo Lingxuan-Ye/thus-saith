@@ -1,18 +1,42 @@
+use crate::cli::MATCHES;
 use anyhow::{Context, Error, Result, ensure};
+use owo_colors::{OwoColorize, Stream};
 use rand::prelude::*;
-use rand_distr::WeightedIndex;
+use rand_distr::weighted::WeightedIndex;
 use serde::Deserialize;
 use std::env;
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
-pub(crate) struct Config {
-    pub(crate) messages: Messages,
-    pub(crate) quotes: QuotePool,
+pub struct Config {
+    pub pace: Pace,
+    pub messages: Messages,
+    pub quotes: QuotePool,
+}
+
+pub struct Pace {
+    mean: f64,
+    stddev: f64,
+}
+
+pub struct Messages {
+    pub interrupt: String,
+}
+
+/// # Guarantees
+///
+/// - Non-empty.
+/// - All quotes have a positive finite weight.
+/// - The sum of all weights is finite.
+pub struct QuotePool(Vec<Quote>);
+
+struct Quote {
+    weight: f64,
+    content: String,
 }
 
 impl Config {
-    pub(crate) fn load() -> Result<Self> {
+    pub fn load() -> Result<Self> {
         let mut config = Config::load_default()?;
 
         if let Some(mut path) = dirs::config_dir() {
@@ -29,37 +53,49 @@ impl Config {
             }
         }
 
-        Ok(config)
-    }
+        if let Some(path) = MATCHES.get_one::<PathBuf>("config") {
+            config.update(path)?;
+        }
 
-    pub(crate) fn load_from(path: &Path) -> Result<Self> {
-        let mut config = Config::load()?;
-        config.update(path)?;
+        if let Some(mean) = MATCHES.get_one::<f64>("mean") {
+            config.pace.mean = *mean;
+        }
+
+        if let Some(stddev) = MATCHES.get_one::<f64>("stddev") {
+            config.pace.stddev = *stddev;
+        }
+
         Ok(config)
     }
 
     fn load_default() -> Result<Self> {
-        let default = include_str!("../config/default.toml");
-        let context = "\
+        const DEFAULT: &str = include_str!("../config/default.toml");
+        const CONTEXT: &str = "\
             failed to parse the default configuration, \
             please consider fixing 'config/default.toml' \
             in the source code and recompiling the program";
 
-        let config: RaWConfig = toml::from_str(default).context(context)?;
+        let config: RawConfig = toml::from_str(DEFAULT).context(CONTEXT)?;
 
-        let interrupt = config
-            .messages
-            .and_then(|messages| messages.interrupt)
-            .context(context)?;
-        let messages = Messages { interrupt };
+        let pace = config.pace.context(CONTEXT)?;
+        let pace = Pace {
+            mean: pace.mean.context(CONTEXT)?,
+            stddev: pace.stddev.context(CONTEXT)?,
+        };
 
-        let quotes = config
-            .quotes
-            .context(context)?
-            .try_into()
-            .context(context)?;
+        let messages = config.messages.context(CONTEXT)?;
+        let messages = Messages {
+            interrupt: messages.interrupt.context(CONTEXT)?,
+        };
 
-        Ok(Config { messages, quotes })
+        let quotes = config.quotes.context(CONTEXT)?;
+        let quotes = quotes.try_into().context(CONTEXT)?;
+
+        Ok(Config {
+            pace,
+            messages,
+            quotes,
+        })
     }
 
     fn update(&mut self, path: &Path) -> Result<&mut Self> {
@@ -68,15 +104,15 @@ impl Config {
         ensure!(path.is_file(), "'{}' is not a file", path_repr);
         let string =
             fs::read_to_string(path).with_context(|| format!("failed to read '{}'", path_repr))?;
-        let config: RaWConfig =
+        let config: RawConfig =
             toml::from_str(&string).with_context(|| format!("failed to parse '{}'", path_repr))?;
 
-        if let Some(messages) = config.messages {
-            if let Some(interrupt) = messages.interrupt {
-                self.messages.interrupt = interrupt;
-            }
+        if let Some(pace) = config.pace {
+            self.pace.update(pace);
         }
-
+        if let Some(messages) = config.messages {
+            self.messages.update(messages);
+        }
         if let Some(quotes) = config.quotes {
             self.quotes = quotes
                 .try_into()
@@ -87,29 +123,52 @@ impl Config {
     }
 }
 
-pub(crate) struct Messages {
-    pub(crate) interrupt: String,
+impl Pace {
+    pub fn mean(&self) -> Result<f64> {
+        ensure!(
+            !self.mean.is_nan() && self.mean.is_finite() && self.mean > 0.0,
+            "'{}' must be positive",
+            "mean".if_supports_color(Stream::Stderr, |text| text.yellow())
+        );
+        Ok(self.mean)
+    }
+
+    pub fn stddev(&self) -> Result<f64> {
+        ensure!(
+            !self.stddev.is_nan() && self.stddev.is_finite() && self.stddev >= 0.0,
+            "'{}' must be non-negative",
+            "stddev".if_supports_color(Stream::Stderr, |text| text.yellow())
+        );
+        Ok(self.stddev)
+    }
+
+    fn update(&mut self, pace: RawPace) -> &mut Self {
+        if let Some(mean) = pace.mean {
+            self.mean = mean;
+        }
+        if let Some(stddev) = pace.stddev {
+            self.stddev = stddev;
+        }
+        self
+    }
 }
 
-struct Quote {
-    weight: f64,
-    content: String,
+impl Messages {
+    fn update(&mut self, messages: RawMessages) -> &mut Self {
+        if let Some(interrupt) = messages.interrupt {
+            self.interrupt = interrupt;
+        }
+        self
+    }
 }
-
-/// # Guarantees
-///
-/// - Non-empty.
-/// - All quotes have a positive finite weight.
-/// - The sum of all weights is finite.
-pub(crate) struct QuotePool(Vec<Quote>);
 
 impl QuotePool {
-    pub(crate) fn sample(&self) -> &str {
+    pub fn choose(&self) -> &str {
         let weights = self.0.iter().map(|quote| quote.weight);
-        let Ok(distribution) = WeightedIndex::new(weights) else {
+        let Ok(distr) = WeightedIndex::new(weights) else {
             unreachable!()
         };
-        let index = thread_rng().sample(distribution);
+        let index = rand::rng().sample(distr);
         &self.0[index].content
     }
 }
@@ -170,6 +229,22 @@ impl TryFrom<Vec<RawQuote>> for QuotePool {
 
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
+struct RawConfig {
+    pace: Option<RawPace>,
+    messages: Option<RawMessages>,
+    #[serde(rename = "quote")]
+    quotes: Option<Vec<RawQuote>>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct RawPace {
+    mean: Option<f64>,
+    stddev: Option<f64>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
 struct RawMessages {
     interrupt: Option<String>,
 }
@@ -179,13 +254,4 @@ struct RawMessages {
 struct RawQuote {
     weight: Option<f64>,
     content: String,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(deny_unknown_fields)]
-struct RaWConfig {
-    messages: Option<RawMessages>,
-
-    #[serde(rename = "quote")]
-    quotes: Option<Vec<RawQuote>>,
 }
