@@ -227,7 +227,7 @@ impl TryFrom<Vec<RawQuote>> for QuotePool {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 struct RawConfig {
     pace: Option<RawPace>,
@@ -236,20 +236,20 @@ struct RawConfig {
     quotes: Option<Vec<RawQuote>>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 struct RawPace {
     mean: Option<f64>,
     stddev: Option<f64>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 struct RawMessages {
     interrupt: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 struct RawQuote {
     weight: Option<f64>,

@@ -25,11 +25,11 @@ impl Waifu {
         Ok(Self { distr, rng })
     }
 
-    pub fn say<T, I, W>(&mut self, mut output: W, tokens: I) -> Result<&mut Self>
+    pub fn say<W, I, T>(&mut self, mut output: W, tokens: I) -> Result<&mut Self>
     where
         W: Write,
-        T: Display,
         I: IntoIterator<Item = T>,
+        T: Display,
     {
         for token in tokens {
             let sampled = self.rng.sample(self.distr);
