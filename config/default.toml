@@ -14,6 +14,31 @@
 #
 # Unspecified configuration items will use fallback values.
 
+[distribution]
+# 每字符平均用时（单位：毫秒）。
+#
+# - 值为 nan、inf、负数或零，且未被覆盖时，程序终止。
+# - 值未指定时，使用回退值。
+#
+# Average time per character (unit: ms).
+#
+# - If the value is nan, inf, negative, or zero, and is not overridden,
+#   the program aborts.
+# - If the value is unspecified, the fallback value is used.
+mean = 100
+
+# 每字符用时标准差（单位：毫秒）。
+#
+# - 值为 nan、inf 或负数，且未被覆盖时，程序终止。
+# - 值未指定时，使用回退值。
+#
+# Standard deviation of time per character (unit: ms).
+#
+# - If the value is nan, inf, or negative, and is not overridden,
+#   the program aborts.
+# - If the value is unspecified, the fallback value is used.
+stddev = 100
+
 [messages]
 # 捕获 SIGINT 信号时显示的消息。
 #
