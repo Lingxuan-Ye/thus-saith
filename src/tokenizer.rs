@@ -5,7 +5,7 @@ pub struct Tokenizer;
 
 impl Tokenizer {
     pub fn tokenize(text: &str) -> impl Iterator<Item = Token> {
-        text.chars().map(Token)
+        text.trim_end().chars().map(Token)
     }
 }
 
