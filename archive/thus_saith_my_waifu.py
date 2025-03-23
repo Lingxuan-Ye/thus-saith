@@ -1,4 +1,9 @@
-#!/usr/bin/env python
+# /// script
+# dependencies = [
+#   "click",
+#   "termstr",
+# ]
+# ///
 
 import sys
 from random import choice, gauss
@@ -66,21 +71,21 @@ QUOTES: list[str] = [
 @click.option(
     "--mean",
     show_default=True,
-    default=8.0,
-    help="The mean time (in milliseconds) taken to type a single character.",
+    default=100.0,
+    help="Average time per character (unit: ms)",
 )
 @click.option(
     "--stddev",
     show_default=True,
-    default=64.0,
-    help="The standard deviation (in milliseconds) of the time taken to type a single character.",
+    default=100.0,
+    help="Standard deviation of time per character (unit: ms)",
 )
 def thus_saith_my_waifu(mean: float, stddev: float) -> None:
-    if mean < 0:
-        error("the mean time must be non-negative")
+    if mean <= 0:
+        error("'mean' must be positive")
         sys.exit(1)
     if stddev < 0:
-        error("the standard deviation must be non-negative")
+        error("'stddev' must be non-negative")
         sys.exit(1)
 
     quote = dedent(choice(QUOTES))
