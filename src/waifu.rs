@@ -6,13 +6,13 @@ use std::fmt::Display;
 use std::io::Write;
 use std::time::{Duration, Instant};
 
-pub struct Typist {
+pub struct Waifu {
     /// The distribution of the milliseconds taken per character.
     distr: LogNormal<f64>,
     rng: ThreadRng,
 }
 
-impl Typist {
+impl Waifu {
     pub fn with_pace(pace: Pace) -> Result<Self> {
         let mean = pace.mean()?;
         let stddev = pace.stddev()?;
@@ -25,20 +25,18 @@ impl Typist {
         Ok(Self { distr, rng })
     }
 
-    /// In this context, a `char` means a valid Unicode character,
-    /// with or without ANSI escape codes.
-    pub fn type_out<C, I, W>(&mut self, chars: I, mut output: W) -> Result<&mut Self>
+    pub fn say<T, I, W>(&mut self, mut output: W, tokens: I) -> Result<&mut Self>
     where
-        C: Display,
-        I: IntoIterator<Item = C>,
         W: Write,
+        T: Display,
+        I: IntoIterator<Item = T>,
     {
-        for char in chars {
+        for token in tokens {
             let sampled = self.rng.sample(self.distr);
             let duration = Duration::from_secs_f64(sampled / 1000.0);
             let start = Instant::now();
             while start.elapsed() < duration {}
-            write!(output, "{char}")?;
+            write!(output, "{token}")?;
             output.flush()?;
         }
         writeln!(output)?;
