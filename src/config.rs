@@ -1,3 +1,4 @@
+use crate::cli::MATCHES;
 use anyhow::{Context, Error, Result, ensure};
 use owo_colors::{OwoColorize, Stream};
 use rand::prelude::*;
@@ -5,7 +6,7 @@ use rand_distr::weighted::WeightedIndex;
 use serde::Deserialize;
 use std::env;
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 pub struct Config {
     pub distribution: Distribution,
@@ -52,12 +53,18 @@ impl Config {
             }
         }
 
-        Ok(config)
-    }
+        if let Some(path) = MATCHES.get_one::<PathBuf>("config") {
+            config.update(path)?;
+        }
 
-    pub fn load_from(path: &Path) -> Result<Self> {
-        let mut config = Config::load()?;
-        config.update(path)?;
+        if let Some(mean) = MATCHES.get_one::<f64>("mean") {
+            config.distribution.mean = *mean;
+        }
+
+        if let Some(stddev) = MATCHES.get_one::<f64>("stddev") {
+            config.distribution.stddev = *stddev;
+        }
+
         Ok(config)
     }
 
