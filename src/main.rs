@@ -21,10 +21,7 @@ fn execute() -> Result<()> {
     let chars = Tokenizer::tokenize(quote);
     let output = stdout();
 
-    let pace = config.pace;
-    let mean = pace.mean()?;
-    let stddev = pace.stddev()?;
-    Typist::with_millis_per_char(mean, stddev)?.type_out(chars, output)?;
+    Typist::with_pace(config.pace)?.type_out(chars, output)?;
 
     Ok(())
 }

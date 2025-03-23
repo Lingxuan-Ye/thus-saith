@@ -1,5 +1,5 @@
+use crate::config::Pace;
 use anyhow::{Context, Result, ensure};
-use owo_colors::{OwoColorize, Stream};
 use rand::prelude::*;
 use rand_distr::LogNormal;
 use std::fmt::Display;
@@ -13,27 +13,12 @@ pub struct Typist {
 }
 
 impl Typist {
-    pub fn with_millis_per_char(mean: f64, std_dev: f64) -> Result<Self> {
-        Self::sanity_check(mean, std_dev)?;
-        let variance = (std_dev.powi(2) / mean.powi(2) + 1.0).ln();
+    pub fn with_pace(pace: Pace) -> Result<Self> {
+        let mean = pace.mean()?;
+        let stddev = pace.stddev()?;
+        let variance = (stddev.powi(2) / mean.powi(2) + 1.0).ln();
         ensure!(variance.is_finite(), "calculation overflows");
         let mu = mean.ln() - 0.5 * variance;
-        let sigma = variance.sqrt();
-        let distr = LogNormal::new(mu, sigma).context("unexpected error")?;
-        let rng = rand::rng();
-        Ok(Self { distr, rng })
-    }
-
-    #[allow(dead_code)]
-    pub fn with_chars_per_min(mean: f64, std_dev: f64) -> Result<Self> {
-        Self::sanity_check(mean, std_dev)?;
-        // Pretty much sure that the formula is mathematically correct.
-        // However, as the `std_dev` increases, the resulting `mean`
-        // deviates from the theoretical value. I have no idea what is
-        // going on here, maybe it just because I'm not good at math.
-        let variance = (std_dev.powi(2) / mean.powi(2) + 1.0).ln();
-        ensure!(variance.is_finite(), "calculation overflows");
-        let mu = -(mean / 60000.0).ln() + 0.5 * variance;
         let sigma = variance.sqrt();
         let distr = LogNormal::new(mu, sigma).context("unexpected error")?;
         let rng = rand::rng();
@@ -58,19 +43,5 @@ impl Typist {
         }
         writeln!(output)?;
         Ok(self)
-    }
-
-    fn sanity_check(mean: f64, std_dev: f64) -> Result<()> {
-        ensure!(
-            !mean.is_nan() && mean.is_finite() && mean > 0.0,
-            "'{}' must be positive",
-            "mean".if_supports_color(Stream::Stderr, |text| text.yellow())
-        );
-        ensure!(
-            !std_dev.is_nan() && std_dev.is_finite() && std_dev >= 0.0,
-            "'{}' must be non-negative",
-            "std-dev".if_supports_color(Stream::Stderr, |text| text.yellow())
-        );
-        Ok(())
     }
 }
