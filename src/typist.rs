@@ -1,5 +1,5 @@
-use ansi_term::Colour::Yellow;
 use anyhow::{Context, Result, ensure};
+use owo_colors::{OwoColorize, Stream};
 use rand::prelude::*;
 use rand_distr::LogNormal;
 use std::fmt::Display;
@@ -63,12 +63,12 @@ impl Typist {
         ensure!(
             !mean.is_nan() && mean.is_finite() && mean > 0.0,
             "'{}' must be positive",
-            Yellow.paint("mean")
+            "mean".if_supports_color(Stream::Stderr, |text| text.yellow())
         );
         ensure!(
             !std_dev.is_nan() && std_dev.is_finite() && std_dev >= 0.0,
             "'{}' must be non-negative",
-            Yellow.paint("std-dev")
+            "std-dev".if_supports_color(Stream::Stderr, |text| text.yellow())
         );
         Ok(())
     }
