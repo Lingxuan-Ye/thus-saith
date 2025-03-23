@@ -25,7 +25,7 @@ fn execute() -> Result<()> {
 
     set_handler(config.messages)?;
 
-    let quote = config.quotes.sample();
+    let quote = config.quotes.choose();
     let chars = Tokenizer::tokenize(quote);
     let output = stdout();
 

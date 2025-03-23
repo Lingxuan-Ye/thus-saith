@@ -156,7 +156,7 @@ impl Messages {
 }
 
 impl QuotePool {
-    pub fn sample(&self) -> &str {
+    pub fn choose(&self) -> &str {
         let weights = self.0.iter().map(|quote| quote.weight);
         let Ok(distribution) = WeightedIndex::new(weights) else {
             unreachable!()
