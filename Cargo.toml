@@ -1,6 +1,6 @@
 [package]
 name = "thus-saith"
-version = "0.5.0"
+version = "0.6.0"
 edition = "2024"
 authors = ["Lingxuan Ye <love@lingxuan.io>"]
 categories = ["command-line-utilities"]
