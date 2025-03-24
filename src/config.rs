@@ -91,7 +91,7 @@ impl Config {
         let quotes = config.quotes.context(CONTEXT)?;
         let quotes = quotes.try_into().context(CONTEXT)?;
 
-        Ok(Config {
+        Ok(Self {
             pace,
             messages,
             quotes,
