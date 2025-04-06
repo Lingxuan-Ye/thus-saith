@@ -1,7 +1,7 @@
 # Thus Saith My Waifu!
 
 [![Crates.io](https://img.shields.io/crates/v/thus-saith.svg)](https://crates.io/crates/thus-saith)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Thus saith my waifu, I mean it.
 
