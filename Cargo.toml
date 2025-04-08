@@ -11,8 +11,8 @@ description = "Thus saith my waifu!"
 
 [dependencies]
 anyhow = "1.0.96"
-clap = { version = "4.5.31", features = ["cargo"] }
-ctrlc = "3.4.5"
+clap = { version = "4.5.35", features = ["cargo"] }
+ctrlc = "3.4.6"
 dirs = "6.0.0"
 eoe = "0.3.1"
 owo-colors = { version = "4.2.0", features = ["supports-colors"] }
