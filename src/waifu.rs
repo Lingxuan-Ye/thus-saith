@@ -25,13 +25,13 @@ impl Waifu {
         Ok(Self { distr, rng })
     }
 
-    pub fn say<W, I, T>(&mut self, mut output: W, tokens: I) -> Result<&mut Self>
+    pub fn say<W, I, T>(&mut self, mut output: W, stream: I) -> Result<&mut Self>
     where
         W: Write,
         I: IntoIterator<Item = T>,
         T: Display,
     {
-        for token in tokens {
+        for token in stream {
             let sampled = self.rng.sample(self.distr);
             let duration = Duration::from_secs_f64(sampled / 1000.0);
             let start = Instant::now();
