@@ -20,7 +20,7 @@ Usage: thus-saith [OPTIONS]
 
 Options:
       --mean <NUMBER>     Average time per character (unit: ms)
-      --stddev <NUMBER>  Standard deviation of time per character (unit: ms)
+      --stddev <NUMBER>   Standard deviation of time per character (unit: ms)
       --config <FILE>     Load the specified configuration file
   -h, --help              Print help
   -V, --version           Print version
