@@ -12,7 +12,7 @@ pub fn set_handler(messages: Messages) -> Result<()> {
             .if_supports_color(Stream::Stderr, |text| {
                 Style::new().yellow().bold().style(text)
             });
-        let _ = writeln!(stderr, "\n\n{}", interupt);
+        let _ = writeln!(stderr, "\n\n{interupt}");
         exit(1);
     })
     .context("system error occurred")

@@ -101,12 +101,12 @@ impl Config {
     fn update(&mut self, path: &Path) -> Result<&mut Self> {
         let path_repr = path.display();
 
-        ensure!(path.is_file(), "'{}' is not a file", path_repr);
+        ensure!(path.is_file(), "'{path_repr}' is not a file");
 
-        let context = format!("failed to read '{}'", path_repr);
+        let context = format!("failed to read '{path_repr}'");
         let string = fs::read_to_string(path).context(context)?;
 
-        let context = format!("failed to parse '{}'", path_repr);
+        let context = format!("failed to parse '{path_repr}'");
         let config: RawConfig = toml::from_str(&string).context(context)?;
 
         if let Some(pace) = config.pace {
@@ -116,7 +116,7 @@ impl Config {
             self.messages.update(messages);
         }
         if let Some(quotes) = config.quotes {
-            let context = format!("failed to normalize quotes from '{}'", path_repr);
+            let context = format!("failed to normalize quotes from '{path_repr}'");
             self.quotes = quotes.try_into().context(context)?;
         }
 
