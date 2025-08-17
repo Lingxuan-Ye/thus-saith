@@ -1,4 +1,4 @@
-use crate::cli::MATCHES;
+use crate::cli::Args;
 use anyhow::{Context, Error, Result, ensure};
 use owo_colors::{OwoColorize, Stream};
 use rand::prelude::*;
@@ -6,7 +6,7 @@ use rand_distr::weighted::WeightedIndex;
 use serde::Deserialize;
 use std::env;
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 pub struct Config {
     pub pace: Pace,
@@ -37,6 +37,7 @@ struct Quote {
 
 impl Config {
     pub fn load() -> Result<Self> {
+        let args = Args::parse();
         let mut config = Config::load_default()?;
 
         if let Some(mut path) = dirs::config_dir() {
@@ -53,16 +54,16 @@ impl Config {
             }
         }
 
-        if let Some(path) = MATCHES.get_one::<PathBuf>("config") {
+        if let Some(path) = args.config {
             config.update(path)?;
         }
 
-        if let Some(mean) = MATCHES.get_one::<f64>("mean") {
-            config.pace.mean = *mean;
+        if let Some(mean) = args.mean {
+            config.pace.mean = mean;
         }
 
-        if let Some(stddev) = MATCHES.get_one::<f64>("stddev") {
-            config.pace.stddev = *stddev;
+        if let Some(stddev) = args.stddev {
+            config.pace.stddev = stddev;
         }
 
         Ok(config)
