@@ -1,8 +1,8 @@
 use clap::{Arg, ArgMatches, ValueHint, command, value_parser};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
-pub static MATCHES: LazyLock<ArgMatches> = LazyLock::new(|| {
+static MATCHES: LazyLock<ArgMatches> = LazyLock::new(|| {
     command!()
         .args([
             Arg::new("mean")
@@ -24,3 +24,19 @@ pub static MATCHES: LazyLock<ArgMatches> = LazyLock::new(|| {
         ])
         .get_matches()
 });
+
+pub struct Args<'a> {
+    pub mean: Option<f64>,
+    pub stddev: Option<f64>,
+    pub config: Option<&'a Path>,
+}
+
+impl Args<'static> {
+    pub fn parse() -> Self {
+        Self {
+            mean: MATCHES.get_one::<f64>("mean").copied(),
+            stddev: MATCHES.get_one::<f64>("stddev").copied(),
+            config: MATCHES.get_one::<PathBuf>("config").map(PathBuf::as_path),
+        }
+    }
+}
