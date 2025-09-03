@@ -25,13 +25,13 @@ static MATCHES: LazyLock<ArgMatches> = LazyLock::new(|| {
         .get_matches()
 });
 
-pub struct Args<'a> {
+pub struct Args {
     pub mean: Option<f64>,
     pub stddev: Option<f64>,
-    pub config: Option<&'a Path>,
+    pub config: Option<&'static Path>,
 }
 
-impl Args<'static> {
+impl Args {
     pub fn parse() -> Self {
         Self {
             mean: MATCHES.get_one::<f64>("mean").copied(),
