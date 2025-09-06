@@ -19,8 +19,8 @@ fn execute() -> Result<()> {
 
     let output = stdout();
     let quote = config.quotes.choose();
-    let tokens = Tokenizer::tokenize(quote);
-    Waifu::with_pace(config.pace)?.say(output, tokens)?;
+    let stream = Tokenizer::tokenize(quote);
+    Waifu::with_pace(config.pace)?.say(output, stream)?;
 
     Ok(())
 }
