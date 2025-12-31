@@ -9,11 +9,13 @@ static MATCHES: LazyLock<ArgMatches> = LazyLock::new(|| {
                 .long("mean")
                 .value_name("NUMBER")
                 .value_parser(value_parser!(f64))
+                .allow_negative_numbers(true)
                 .help("Average time per character (unit: ms)"),
             Arg::new("stddev")
                 .long("stddev")
                 .value_name("NUMBER")
                 .value_parser(value_parser!(f64))
+                .allow_negative_numbers(true)
                 .help("Standard deviation of time per character (unit: ms)"),
             Arg::new("config")
                 .long("config")
