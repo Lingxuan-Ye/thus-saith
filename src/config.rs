@@ -9,7 +9,7 @@ use std::path::Path;
 #[serde(deny_unknown_fields)]
 pub struct Config {
     pub pace: Pace,
-    pub messages: Messages,
+    pub message: Message,
     #[serde(rename = "quote")]
     pub quotes: Vec<RawQuote>,
 }
@@ -23,7 +23,7 @@ pub struct Pace {
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct Messages {
+pub struct Message {
     pub interrupt: String,
 }
 
@@ -96,10 +96,10 @@ impl Config {
             }
         }
 
-        if let Some(messages) = patch.messages
-            && let Some(interrupt) = messages.interrupt
+        if let Some(message) = patch.message
+            && let Some(interrupt) = message.interrupt
         {
-            self.messages.interrupt = interrupt;
+            self.message.interrupt = interrupt;
         }
 
         if let Some(quotes) = patch.quotes {
@@ -114,7 +114,7 @@ impl Config {
 #[serde(deny_unknown_fields)]
 struct ConfigPatch {
     pace: Option<PacePatch>,
-    messages: Option<MessagesPatch>,
+    message: Option<MessagePatch>,
     #[serde(rename = "quote")]
     quotes: Option<Vec<RawQuote>>,
 }
@@ -128,6 +128,6 @@ struct PacePatch {
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
-struct MessagesPatch {
+struct MessagePatch {
     interrupt: Option<String>,
 }

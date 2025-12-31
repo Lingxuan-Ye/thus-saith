@@ -42,12 +42,12 @@ mean = 100
 # - If the value is unspecified, the fallback value is used.
 stddev = 100
 
-[messages]
-# 捕获 SIGINT 信号时显示的消息。
+[message]
+# 捕获 SIGINT 时显示的消息。
 #
 # - 值未指定时，使用回退值。
 #
-# Message displayed when catching the SIGINT signal.
+# Message displayed when catching the SIGINT.
 #
 # - If the value is unspecified, the fallback value is used.
 interrupt = "呐、桥豆麻袋 …… 已经「厌烦」吾辈了嘛？"

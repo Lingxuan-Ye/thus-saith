@@ -31,7 +31,7 @@ fn run() -> Result<()> {
         config.pace.stddev = stddev;
     }
 
-    set_handler(config.messages)?;
+    set_handler(config.message)?;
 
     let mean = Mean::try_from(config.pace.mean)?;
     let stddev = Stddev::try_from(config.pace.stddev)?;
