@@ -1,5 +1,5 @@
-use crate::config::Pace;
-use anyhow::{Context, Result, ensure};
+use anyhow::{Context, Error, Result, ensure};
+use owo_colors::{OwoColorize, Stream};
 use rand::prelude::*;
 use rand_distr::LogNormal;
 use std::fmt::Display;
@@ -13,9 +13,9 @@ pub struct Waifu {
 }
 
 impl Waifu {
-    pub fn with_pace(pace: Pace) -> Result<Self> {
-        let mean = pace.mean()?;
-        let stddev = pace.stddev()?;
+    pub fn new(mean: Mean, stddev: Stddev) -> Result<Self> {
+        let mean = mean.0;
+        let stddev = stddev.0;
         let variance = (stddev.powi(2) / mean.powi(2) + 1.0).ln();
         ensure!(variance.is_finite(), "calculation overflows");
         let mu = mean.ln() - 0.5 * variance;
@@ -25,11 +25,11 @@ impl Waifu {
         Ok(Self { distr, rng })
     }
 
-    pub fn say<W, I, T>(&mut self, mut output: W, stream: I) -> Result<&mut Self>
+    pub fn say<S, T, W>(&mut self, stream: S, mut output: W) -> Result<&mut Self>
     where
-        W: Write,
-        I: IntoIterator<Item = T>,
+        S: IntoIterator<Item = T>,
         T: Display,
+        W: Write,
     {
         for token in stream {
             let sampled = self.rng.sample(self.distr);
@@ -41,5 +41,37 @@ impl Waifu {
         }
         writeln!(output)?;
         Ok(self)
+    }
+}
+
+pub struct Mean(f64);
+
+impl TryFrom<f64> for Mean {
+    type Error = Error;
+
+    fn try_from(value: f64) -> Result<Self> {
+        ensure!(
+            !value.is_nan() && value.is_finite() && value > 0.0,
+            "'{}' must be finite positive",
+            "mean".if_supports_color(Stream::Stderr, |text| text.yellow())
+        );
+
+        Ok(Self(value))
+    }
+}
+
+pub struct Stddev(f64);
+
+impl TryFrom<f64> for Stddev {
+    type Error = Error;
+
+    fn try_from(value: f64) -> Result<Self> {
+        ensure!(
+            !value.is_nan() && value.is_finite() && value >= 0.0,
+            "'{}' must be finite non-negative",
+            "stddev".if_supports_color(Stream::Stderr, |text| text.yellow())
+        );
+
+        Ok(Self(value))
     }
 }
