@@ -2,7 +2,7 @@
 name = "thus-saith"
 version = "0.7.0"
 edition = "2024"
-authors = ["Lingxuan Ye <love@lingxuan.io>"]
+authors = ["Lingxuan Ye <ink@lingxuan.io>"]
 categories = ["command-line-utilities"]
 repository = "https://github.com/Lingxuan-Ye/thus-saith"
 readme = "README.md"
