@@ -5,7 +5,7 @@ use std::env;
 use std::fs;
 use std::path::Path;
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Config {
     pub pace: Pace,
@@ -14,20 +14,20 @@ pub struct Config {
     pub quotes: Vec<RawQuote>,
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Pace {
     pub mean: f64,
     pub stddev: f64,
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Message {
     pub interrupt: String,
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct RawQuote {
     pub weight: Option<f64>,
@@ -110,7 +110,7 @@ impl Config {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
 struct ConfigPatch {
     pace: Option<PacePatch>,
@@ -119,14 +119,14 @@ struct ConfigPatch {
     quotes: Option<Vec<RawQuote>>,
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
 struct PacePatch {
     mean: Option<f64>,
     stddev: Option<f64>,
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
 struct MessagePatch {
     interrupt: Option<String>,

@@ -8,8 +8,10 @@ use rand_distr::weighted::WeightedIndex;
 /// - Non-empty.
 /// - All quotes have a positive finite weight.
 /// - The sum of all weights is finite.
+#[derive(Debug)]
 pub struct QuotePool(Vec<Quote>);
 
+#[derive(Debug)]
 struct Quote {
     weight: f64,
     content: String,
