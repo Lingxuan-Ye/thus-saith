@@ -27,6 +27,7 @@ static MATCHES: LazyLock<ArgMatches> = LazyLock::new(|| {
         .get_matches()
 });
 
+#[derive(Debug)]
 pub struct Args {
     pub mean: Option<f64>,
     pub stddev: Option<f64>,

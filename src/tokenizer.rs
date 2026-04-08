@@ -1,6 +1,7 @@
 use std::fmt;
 
 /// How can anyone call this a tokenizer? It doesn't tokenize anything!
+#[derive(Debug)]
 pub struct Tokenizer;
 
 impl Tokenizer {
@@ -9,6 +10,7 @@ impl Tokenizer {
     }
 }
 
+#[derive(Debug)]
 pub struct Token(char);
 
 impl fmt::Display for Token {

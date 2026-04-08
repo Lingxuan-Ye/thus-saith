@@ -6,6 +6,7 @@ use std::fmt::Display;
 use std::io::Write;
 use std::time::{Duration, Instant};
 
+#[derive(Debug)]
 pub struct Waifu {
     /// The distribution of the milliseconds taken per character.
     distr: LogNormal<f64>,
@@ -44,6 +45,7 @@ impl Waifu {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
 pub struct Mean(f64);
 
 impl TryFrom<f64> for Mean {
@@ -60,6 +62,7 @@ impl TryFrom<f64> for Mean {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
 pub struct Stddev(f64);
 
 impl TryFrom<f64> for Stddev {
