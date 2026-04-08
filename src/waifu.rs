@@ -45,7 +45,7 @@ impl Waifu {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct Mean(f64);
 
 impl TryFrom<f64> for Mean {
@@ -62,7 +62,7 @@ impl TryFrom<f64> for Mean {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct Stddev(f64);
 
 impl TryFrom<f64> for Stddev {
